@@ -1,4 +1,4 @@
--- Nigussie Learning Lab database schema
+-- SkillBridge Academy database schema
 -- Run this in Supabase SQL Editor.
 
 create extension if not exists "uuid-ossp";
