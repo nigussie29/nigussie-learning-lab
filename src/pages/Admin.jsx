@@ -42,6 +42,7 @@ export default function Admin() {
   const [course, setCourse] = useState(emptyCourse);
   const [lesson, setLesson] = useState(emptyLesson);
   const [resource, setResource] = useState(emptyResource);
+  const [selectedFile, setSelectedFile] = useState(null);
 
   const [courseStatus, setCourseStatus] = useState('');
   const [lessonStatus, setLessonStatus] = useState('');
@@ -105,6 +106,10 @@ export default function Admin() {
       [name]: value
     });
   }
+  function handleFileChange(event) {
+  const file = event.target.files[0];
+  setSelectedFile(file);
+}
 
   async function createCourse(event) {
     event.preventDefault();
@@ -142,20 +147,54 @@ export default function Admin() {
     }
   }
 
-  async function createResource(event) {
-    event.preventDefault();
-    setResourceStatus('Creating resource...');
+ async function createResource(event) {
+  event.preventDefault();
+  setResourceStatus('Creating resource...');
 
-    const { error } = await supabase.from('resources').insert(resource);
+  let fileUrl = resource.file_url;
 
-    if (error) {
-      setResourceStatus(error.message);
-    } else {
-      setResourceStatus('Resource created successfully.');
-      setResource(emptyResource);
+  if (selectedFile) {
+    const fileExt = selectedFile.name.split('.').pop();
+    const safeFileName = selectedFile.name
+      .toLowerCase()
+      .replace(/[^a-z0-9.]+/g, '-');
+
+    const filePath = `resources/${Date.now()}-${safeFileName}`;
+
+    const { error: uploadError } = await supabase.storage
+      .from('course-files')
+      .upload(filePath, selectedFile);
+
+    if (uploadError) {
+      setResourceStatus(uploadError.message);
+      return;
     }
+
+    const { data: publicUrlData } = supabase.storage
+      .from('course-files')
+      .getPublicUrl(filePath);
+
+    fileUrl = publicUrlData.publicUrl;
   }
 
+  if (!fileUrl) {
+    setResourceStatus('Please upload a file or paste a file URL.');
+    return;
+  }
+
+  const { error } = await supabase.from('resources').insert({
+    ...resource,
+    file_url: fileUrl
+  });
+
+  if (error) {
+    setResourceStatus(error.message);
+  } else {
+    setResourceStatus('Resource created successfully.');
+    setResource(emptyResource);
+    setSelectedFile(null);
+  }
+}
   return (
     <section className="section py-16">
       <div className="max-w-3xl">
@@ -236,15 +275,30 @@ export default function Admin() {
             </div>
 
             <div>
-              <label className="label">Slug</label>
-              <input
-                className="input"
-                name="slug"
-                value={course.slug}
-                onChange={updateCourseField}
-                required
-              />
-            </div>
+  <label className="label">Upload File</label>
+  <input
+    className="input"
+    type="file"
+    accept=".pdf,.doc,.docx,.xlsx,.csv,.png,.jpg,.jpeg"
+    onChange={handleFileChange}
+  />
+  {selectedFile && (
+    <p className="mt-2 text-sm text-slate-600">
+      Selected: {selectedFile.name}
+    </p>
+  )}
+</div>
+
+<div>
+  <label className="label">Or Paste File URL</label>
+  <input
+    className="input"
+    name="file_url"
+    value={resource.file_url}
+    onChange={updateResourceField}
+    placeholder="Optional: paste Supabase public file URL"
+  />
+</div>
 
             <div>
               <label className="label">Category</label>
