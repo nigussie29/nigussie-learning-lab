@@ -16,29 +16,41 @@ export default function CourseDetail() {
 
   useEffect(() => {
     async function fetchCourse() {
-      const { data } = await supabase
+      const { data, error } = await supabase
         .from('courses')
         .select('*')
         .eq('slug', slug)
         .single();
 
+      if (error) {
+        console.error('Course fetch error:', error);
+      }
+
       const selected = data || fallbackCourses.find((item) => item.slug === slug);
       setCourse(selected || null);
 
       if (selected?.id && !String(selected.id).startsWith('fallback')) {
-        const { data: lessonData } = await supabase
+        const { data: lessonData, error: lessonError } = await supabase
           .from('lessons')
           .select('*')
           .eq('course_id', selected.id)
           .order('order_index');
 
+        if (lessonError) {
+          console.error('Lessons fetch error:', lessonError);
+        }
+
         setLessons(lessonData || []);
 
-        const { data: resourceData } = await supabase
+        const { data: resourceData, error: resourceError } = await supabase
           .from('resources')
           .select('*')
           .eq('course_id', selected.id)
           .order('created_at', { ascending: false });
+
+        if (resourceError) {
+          console.error('Resources fetch error:', resourceError);
+        }
 
         setResources(resourceData || []);
       }
@@ -53,12 +65,25 @@ export default function CourseDetail() {
       return;
     }
 
+    if (!course?.id) {
+      setMessage('Course information is still loading. Please try again.');
+      return;
+    }
+
     const { error } = await supabase.from('enrollments').insert({
       user_id: session.user.id,
       course_id: course.id
     });
 
-    setMessage(error ? error.message : 'You are enrolled. Go to your dashboard.');
+    if (error) {
+      if (error.message.includes('duplicate key')) {
+        setMessage('You are already enrolled in this course. Go to your dashboard.');
+      } else {
+        setMessage(error.message);
+      }
+    } else {
+      setMessage('You are enrolled. Go to your dashboard.');
+    }
   }
 
   if (!course) {
