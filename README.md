@@ -1,4 +1,4 @@
-# Nigussie Learning Lab — Online Teaching Platform MVP
+# SkillBridge Academy — Online Teaching Platform MVP
 
 A modern online education website built with React, Tailwind CSS, Supabase, and Vercel.
 
