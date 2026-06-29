@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { supabase } from '../lib/supabaseClient';
 import useAuth from '../hooks/useAuth';
 
@@ -7,7 +7,7 @@ const emptyCourse = {
   slug: '',
   short_description: '',
   description: '',
-  category: 'Python',
+  category: 'Mathematics',
   level: 'Beginner',
   price: 0,
   duration: '',
@@ -15,25 +15,98 @@ const emptyCourse = {
   published: true
 };
 
+const emptyLesson = {
+  course_id: '',
+  title: '',
+  description: '',
+  video_url: '',
+  order_index: 1,
+  free_preview: true,
+  content: ''
+};
+
+const emptyResource = {
+  course_id: '',
+  title: '',
+  description: '',
+  file_url: '',
+  resource_type: 'pdf'
+};
+
 export default function Admin() {
   const { session } = useAuth();
-  const [course, setCourse] = useState(emptyCourse);
-  const [status, setStatus] = useState('');
 
-  function slugify(value) {
-    return value.toLowerCase().trim().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '');
+  const [courses, setCourses] = useState([]);
+  const [course, setCourse] = useState(emptyCourse);
+  const [lesson, setLesson] = useState(emptyLesson);
+  const [resource, setResource] = useState(emptyResource);
+
+  const [courseStatus, setCourseStatus] = useState('');
+  const [lessonStatus, setLessonStatus] = useState('');
+  const [resourceStatus, setResourceStatus] = useState('');
+
+  useEffect(() => {
+    fetchCourses();
+  }, []);
+
+  async function fetchCourses() {
+    const { data, error } = await supabase
+      .from('courses')
+      .select('id, title, slug, category')
+      .order('created_at', { ascending: false });
+
+    if (error) {
+      console.error('Courses fetch error:', error);
+      return;
+    }
+
+    setCourses(data || []);
   }
 
-  function updateField(event) {
+  function slugify(value) {
+    return value
+      .toLowerCase()
+      .trim()
+      .replace(/[^a-z0-9]+/g, '-')
+      .replace(/(^-|-$)/g, '');
+  }
+
+  function updateCourseField(event) {
     const { name, value, type, checked } = event.target;
-    const updated = { ...course, [name]: type === 'checkbox' ? checked : value };
-    if (name === 'title') updated.slug = slugify(value);
+
+    const updated = {
+      ...course,
+      [name]: type === 'checkbox' ? checked : value
+    };
+
+    if (name === 'title') {
+      updated.slug = slugify(value);
+    }
+
     setCourse(updated);
+  }
+
+  function updateLessonField(event) {
+    const { name, value, type, checked } = event.target;
+
+    setLesson({
+      ...lesson,
+      [name]: type === 'checkbox' ? checked : value
+    });
+  }
+
+  function updateResourceField(event) {
+    const { name, value } = event.target;
+
+    setResource({
+      ...resource,
+      [name]: value
+    });
   }
 
   async function createCourse(event) {
     event.preventDefault();
-    setStatus('Creating course...');
+    setCourseStatus('Creating course...');
 
     const { error } = await supabase.from('courses').insert({
       ...course,
@@ -41,86 +114,377 @@ export default function Admin() {
       created_by: session.user.id
     });
 
-    if (error) setStatus(error.message);
-    else {
-      setStatus('Course created successfully.');
+    if (error) {
+      setCourseStatus(error.message);
+    } else {
+      setCourseStatus('Course created successfully.');
       setCourse(emptyCourse);
+      fetchCourses();
+    }
+  }
+
+  async function createLesson(event) {
+    event.preventDefault();
+    setLessonStatus('Creating lesson...');
+
+    const { error } = await supabase.from('lessons').insert({
+      ...lesson,
+      order_index: Number(lesson.order_index)
+    });
+
+    if (error) {
+      setLessonStatus(error.message);
+    } else {
+      setLessonStatus('Lesson created successfully.');
+      setLesson(emptyLesson);
+    }
+  }
+
+  async function createResource(event) {
+    event.preventDefault();
+    setResourceStatus('Creating resource...');
+
+    const { error } = await supabase.from('resources').insert(resource);
+
+    if (error) {
+      setResourceStatus(error.message);
+    } else {
+      setResourceStatus('Resource created successfully.');
+      setResource(emptyResource);
     }
   }
 
   return (
     <section className="section py-16">
-      <h1 className="text-4xl font-extrabold">Admin Page</h1>
-      <p className="mt-4 text-slate-600">Add new courses to your platform.</p>
+      <div className="max-w-3xl">
+        <h1 className="text-4xl font-extrabold">Admin Dashboard</h1>
+        <p className="mt-4 text-slate-600">
+          Add courses, lessons, and downloadable resources for your online learning platform.
+        </p>
+      </div>
 
-      <form onSubmit={createCourse} className="card mt-8 grid gap-4 p-6 md:grid-cols-2">
-        <div className="md:col-span-2">
-          <label className="label">Course Title</label>
-          <input className="input" name="title" value={course.title} onChange={updateField} required />
-        </div>
+      <div className="mt-10 grid gap-8">
+        {/* Create Course */}
+        <form onSubmit={createCourse} className="card grid gap-4 p-6 md:grid-cols-2">
+          <div className="md:col-span-2">
+            <h2 className="text-2xl font-bold">Create Course</h2>
+            <p className="mt-2 text-slate-600">
+              Add a new course to the public Courses page.
+            </p>
+          </div>
 
-        <div>
-          <label className="label">Slug</label>
-          <input className="input" name="slug" value={course.slug} onChange={updateField} required />
-        </div>
+          <div className="md:col-span-2">
+            <label className="label">Course Title</label>
+            <input
+              className="input"
+              name="title"
+              value={course.title}
+              onChange={updateCourseField}
+              required
+            />
+          </div>
 
-        <div>
-          <label className="label">Category</label>
-          <select className="input" name="category" value={course.category} onChange={updateField}>
-            <option>Math</option>
-            <option>Python</option>
-            <option>SQL</option>
-            <option>Power BI</option>
-            <option>Microsoft Fabric</option>
-            <option>AI</option>
-            <option>Data Analytics</option>
-          </select>
-        </div>
+          <div>
+            <label className="label">Slug</label>
+            <input
+              className="input"
+              name="slug"
+              value={course.slug}
+              onChange={updateCourseField}
+              required
+            />
+          </div>
 
-        <div>
-          <label className="label">Level</label>
-          <select className="input" name="level" value={course.level} onChange={updateField}>
-            <option>Beginner</option>
-            <option>Intermediate</option>
-            <option>Advanced</option>
-          </select>
-        </div>
+          <div>
+            <label className="label">Category</label>
+            <select
+              className="input"
+              name="category"
+              value={course.category}
+              onChange={updateCourseField}
+            >
+              <option>Mathematics</option>
+              <option>Python</option>
+              <option>SQL</option>
+              <option>Power BI</option>
+              <option>Microsoft Fabric</option>
+              <option>AI</option>
+              <option>Data Analytics</option>
+              <option>Coding</option>
+            </select>
+          </div>
 
-        <div>
-          <label className="label">Duration</label>
-          <input className="input" name="duration" value={course.duration} onChange={updateField} placeholder="Example: 4 weeks" />
-        </div>
+          <div>
+            <label className="label">Level</label>
+            <select
+              className="input"
+              name="level"
+              value={course.level}
+              onChange={updateCourseField}
+            >
+              <option>Beginner</option>
+              <option>Intermediate</option>
+              <option>Advanced</option>
+            </select>
+          </div>
 
-        <div>
-          <label className="label">Price</label>
-          <input className="input" name="price" type="number" value={course.price} onChange={updateField} />
-        </div>
+          <div>
+            <label className="label">Duration</label>
+            <input
+              className="input"
+              name="duration"
+              value={course.duration}
+              onChange={updateCourseField}
+              placeholder="Example: 4 weeks"
+            />
+          </div>
 
-        <div>
-          <label className="label">Image URL</label>
-          <input className="input" name="image_url" value={course.image_url} onChange={updateField} />
-        </div>
+          <div>
+            <label className="label">Price</label>
+            <input
+              className="input"
+              name="price"
+              type="number"
+              value={course.price}
+              onChange={updateCourseField}
+            />
+          </div>
 
-        <div className="md:col-span-2">
-          <label className="label">Short Description</label>
-          <input className="input" name="short_description" value={course.short_description} onChange={updateField} required />
-        </div>
+          <div>
+            <label className="label">Image URL</label>
+            <input
+              className="input"
+              name="image_url"
+              value={course.image_url}
+              onChange={updateCourseField}
+              placeholder="https://..."
+            />
+          </div>
 
-        <div className="md:col-span-2">
-          <label className="label">Full Description</label>
-          <textarea className="input min-h-36" name="description" value={course.description} onChange={updateField} required />
-        </div>
+          <div className="md:col-span-2">
+            <label className="label">Short Description</label>
+            <input
+              className="input"
+              name="short_description"
+              value={course.short_description}
+              onChange={updateCourseField}
+              required
+            />
+          </div>
 
-        <label className="flex items-center gap-2 md:col-span-2">
-          <input type="checkbox" name="published" checked={course.published} onChange={updateField} />
-          Published
-        </label>
+          <div className="md:col-span-2">
+            <label className="label">Full Description</label>
+            <textarea
+              className="input min-h-32"
+              name="description"
+              value={course.description}
+              onChange={updateCourseField}
+              required
+            />
+          </div>
 
-        <div className="md:col-span-2">
-          <button className="btn-primary">Create Course</button>
-          {status && <p className="mt-4 text-sm text-slate-600">{status}</p>}
-        </div>
-      </form>
+          <label className="flex items-center gap-2 md:col-span-2">
+            <input
+              type="checkbox"
+              name="published"
+              checked={course.published}
+              onChange={updateCourseField}
+            />
+            Published
+          </label>
+
+          <div className="md:col-span-2">
+            <button className="btn-primary">Create Course</button>
+            {courseStatus && <p className="mt-4 text-sm text-slate-600">{courseStatus}</p>}
+          </div>
+        </form>
+
+        {/* Create Lesson */}
+        <form onSubmit={createLesson} className="card grid gap-4 p-6 md:grid-cols-2">
+          <div className="md:col-span-2">
+            <h2 className="text-2xl font-bold">Create Lesson</h2>
+            <p className="mt-2 text-slate-600">
+              Add a lesson to an existing course.
+            </p>
+          </div>
+
+          <div className="md:col-span-2">
+            <label className="label">Select Course</label>
+            <select
+              className="input"
+              name="course_id"
+              value={lesson.course_id}
+              onChange={updateLessonField}
+              required
+            >
+              <option value="">Choose a course</option>
+              {courses.map((item) => (
+                <option key={item.id} value={item.id}>
+                  {item.title}
+                </option>
+              ))}
+            </select>
+          </div>
+
+          <div className="md:col-span-2">
+            <label className="label">Lesson Title</label>
+            <input
+              className="input"
+              name="title"
+              value={lesson.title}
+              onChange={updateLessonField}
+              placeholder="Lesson 3: Statistics Foundations"
+              required
+            />
+          </div>
+
+          <div>
+            <label className="label">Lesson Order</label>
+            <input
+              className="input"
+              name="order_index"
+              type="number"
+              value={lesson.order_index}
+              onChange={updateLessonField}
+              required
+            />
+          </div>
+
+          <div>
+            <label className="label">Video URL</label>
+            <input
+              className="input"
+              name="video_url"
+              value={lesson.video_url}
+              onChange={updateLessonField}
+              placeholder="YouTube embed URL or video file URL"
+            />
+          </div>
+
+          <div className="md:col-span-2">
+            <label className="label">Short Lesson Description</label>
+            <input
+              className="input"
+              name="description"
+              value={lesson.description}
+              onChange={updateLessonField}
+              required
+            />
+          </div>
+
+          <div className="md:col-span-2">
+            <label className="label">Lesson Notes / Content</label>
+            <textarea
+              className="input min-h-72 font-mono text-sm"
+              name="content"
+              value={lesson.content}
+              onChange={updateLessonField}
+              placeholder="# Lesson Title&#10;&#10;## Learning Objectives&#10;1. ..."
+            />
+          </div>
+
+          <label className="flex items-center gap-2 md:col-span-2">
+            <input
+              type="checkbox"
+              name="free_preview"
+              checked={lesson.free_preview}
+              onChange={updateLessonField}
+            />
+            Free Preview
+          </label>
+
+          <div className="md:col-span-2">
+            <button className="btn-primary">Create Lesson</button>
+            {lessonStatus && <p className="mt-4 text-sm text-slate-600">{lessonStatus}</p>}
+          </div>
+        </form>
+
+        {/* Create Resource */}
+        <form onSubmit={createResource} className="card grid gap-4 p-6 md:grid-cols-2">
+          <div className="md:col-span-2">
+            <h2 className="text-2xl font-bold">Create Resource</h2>
+            <p className="mt-2 text-slate-600">
+              Add a downloadable PDF, worksheet, template, or dataset link to a course.
+            </p>
+          </div>
+
+          <div className="md:col-span-2">
+            <label className="label">Select Course</label>
+            <select
+              className="input"
+              name="course_id"
+              value={resource.course_id}
+              onChange={updateResourceField}
+              required
+            >
+              <option value="">Choose a course</option>
+              {courses.map((item) => (
+                <option key={item.id} value={item.id}>
+                  {item.title}
+                </option>
+              ))}
+            </select>
+          </div>
+
+          <div className="md:col-span-2">
+            <label className="label">Resource Title</label>
+            <input
+              className="input"
+              name="title"
+              value={resource.title}
+              onChange={updateResourceField}
+              placeholder="Mathematics Lesson 3 Notes PDF"
+              required
+            />
+          </div>
+
+          <div>
+            <label className="label">Resource Type</label>
+            <select
+              className="input"
+              name="resource_type"
+              value={resource.resource_type}
+              onChange={updateResourceField}
+            >
+              <option value="pdf">PDF</option>
+              <option value="worksheet">Worksheet</option>
+              <option value="template">Template</option>
+              <option value="dataset">Dataset</option>
+              <option value="link">Link</option>
+            </select>
+          </div>
+
+          <div>
+            <label className="label">File URL</label>
+            <input
+              className="input"
+              name="file_url"
+              value={resource.file_url}
+              onChange={updateResourceField}
+              placeholder="Paste Supabase public file URL"
+              required
+            />
+          </div>
+
+          <div className="md:col-span-2">
+            <label className="label">Resource Description</label>
+            <textarea
+              className="input min-h-24"
+              name="description"
+              value={resource.description}
+              onChange={updateResourceField}
+              required
+            />
+          </div>
+
+          <div className="md:col-span-2">
+            <button className="btn-primary">Create Resource</button>
+            {resourceStatus && (
+              <p className="mt-4 text-sm text-slate-600">{resourceStatus}</p>
+            )}
+          </div>
+        </form>
+      </div>
     </section>
   );
 }
