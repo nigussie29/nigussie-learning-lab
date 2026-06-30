@@ -1,63 +1,98 @@
-import { useState } from 'react';
-import { supabase } from '../lib/supabaseClient';
+import { Mail, MapPin, Clock, Send, MessageCircle } from "lucide-react";
 
 export default function Contact() {
-  const [form, setForm] = useState({ name: '', email: '', subject: '', message: '' });
-  const [status, setStatus] = useState('');
-
-  function updateField(event) {
-    setForm({ ...form, [event.target.name]: event.target.value });
-  }
-
-  async function submitForm(event) {
-    event.preventDefault();
-    setStatus('Sending...');
-
-    const { error } = await supabase.from('contact_messages').insert(form);
-
-    if (error) {
-      setStatus(error.message);
-    } else {
-      setStatus('Thank you. Your message was sent.');
-      setForm({ name: '', email: '', subject: '', message: '' });
-    }
-  }
-
   return (
     <section className="section py-16">
-      <div className="grid gap-10 lg:grid-cols-2">
-        <div>
-          <h1 className="text-4xl font-extrabold">Contact Me</h1>
-          <p className="mt-4 text-lg leading-8 text-slate-600">
-            Have a question about courses, tutoring, learning paths, or digital learning materials? Send a message.
-          </p>
-          <div className="card mt-8 p-6">
-            <h2 className="text-xl font-bold">Good for</h2>
-            <ul className="mt-4 space-y-2 text-slate-600">
-              <li>• Beginner technology learning</li>
-              <li>• Data analytics career change</li>
-              <li>• AI project coaching</li>
-              <li>• Math and coding support</li>
-            </ul>
+      <div className="max-w-3xl">
+        <p className="text-sm font-semibold uppercase tracking-wide text-blue-600">
+          Contact
+        </p>
+
+        <h1 className="mt-3 text-4xl font-extrabold tracking-tight text-slate-900 md:text-5xl">
+          Let’s connect and build your learning journey.
+        </h1>
+
+        <p className="mt-6 text-lg leading-8 text-slate-600">
+          Have questions about courses, career paths, tutoring, partnerships, or
+          technical support? Send a message and we’ll respond as soon as possible.
+        </p>
+      </div>
+
+      <div className="mt-12 grid gap-8 lg:grid-cols-[1fr_1.4fr]">
+        <div className="space-y-5">
+          <div className="card p-6">
+            <Mail className="text-blue-600" size={30} />
+            <h2 className="mt-4 text-xl font-bold">Email</h2>
+            <p className="mt-2 text-slate-600">support@skillbridgeacademy.com</p>
+          </div>
+
+          <div className="card p-6">
+            <MapPin className="text-blue-600" size={30} />
+            <h2 className="mt-4 text-xl font-bold">Location</h2>
+            <p className="mt-2 text-slate-600">Charlotte, North Carolina</p>
+          </div>
+
+          <div className="card p-6">
+            <Clock className="text-blue-600" size={30} />
+            <h2 className="mt-4 text-xl font-bold">Office Hours</h2>
+            <p className="mt-2 text-slate-600">
+              Monday – Friday, 9:00 AM – 5:00 PM
+            </p>
           </div>
         </div>
 
-        <form onSubmit={submitForm} className="card p-6">
-          <label className="label">Name</label>
-          <input className="input" name="name" value={form.name} onChange={updateField} required />
+        <div className="card p-8">
+          <div className="flex items-center gap-3">
+            <MessageCircle className="text-blue-600" />
+            <h2 className="text-2xl font-bold">Send a Message</h2>
+          </div>
 
-          <label className="label mt-4">Email</label>
-          <input className="input" type="email" name="email" value={form.email} onChange={updateField} required />
+          <form className="mt-6 space-y-5">
+            <div>
+              <label className="font-semibold text-slate-700">Full Name</label>
+              <input
+                type="text"
+                placeholder="Enter your name"
+                className="mt-2 w-full rounded-xl border border-slate-200 px-4 py-3 outline-none focus:border-blue-500"
+              />
+            </div>
 
-          <label className="label mt-4">Subject</label>
-          <input className="input" name="subject" value={form.subject} onChange={updateField} />
+            <div>
+              <label className="font-semibold text-slate-700">Email</label>
+              <input
+                type="email"
+                placeholder="Enter your email"
+                className="mt-2 w-full rounded-xl border border-slate-200 px-4 py-3 outline-none focus:border-blue-500"
+              />
+            </div>
 
-          <label className="label mt-4">Message</label>
-          <textarea className="input min-h-36" name="message" value={form.message} onChange={updateField} required />
+            <div>
+              <label className="font-semibold text-slate-700">Subject</label>
+              <input
+                type="text"
+                placeholder="Course question, support, partnership..."
+                className="mt-2 w-full rounded-xl border border-slate-200 px-4 py-3 outline-none focus:border-blue-500"
+              />
+            </div>
 
-          <button className="btn-primary mt-6 w-full">Send Message</button>
-          {status && <p className="mt-4 text-sm text-slate-600">{status}</p>}
-        </form>
+            <div>
+              <label className="font-semibold text-slate-700">Message</label>
+              <textarea
+                rows="6"
+                placeholder="Write your message..."
+                className="mt-2 w-full rounded-xl border border-slate-200 px-4 py-3 outline-none focus:border-blue-500"
+              />
+            </div>
+
+            <button
+              type="button"
+              className="inline-flex items-center rounded-xl bg-blue-600 px-6 py-3 font-bold text-white transition hover:bg-blue-700"
+            >
+              Send Message
+              <Send size={18} className="ml-2" />
+            </button>
+          </form>
+        </div>
       </div>
     </section>
   );

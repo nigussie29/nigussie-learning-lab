@@ -1,45 +1,91 @@
-import { useEffect, useState } from 'react';
-import { supabase } from '../lib/supabaseClient';
+import { Link } from "react-router-dom";
+import { Calendar, User, ArrowRight } from "lucide-react";
 
-const fallbackPosts = [
+const posts = [
   {
-    id: 'b1',
-    title: 'How to Start Learning AI as a Beginner',
-    excerpt: 'A simple path for beginners who want to enter AI and data careers.',
-    content: 'Start with Python, statistics, data analysis, machine learning basics, and one portfolio project.'
+    title: "How to Start Learning Data Analytics in 2026",
+    category: "Data Analytics",
+    author: "Nigussie Guluma",
+    date: "June 2026",
+    excerpt:
+      "A beginner-friendly roadmap for learning Excel, SQL, Power BI, Python, and portfolio projects.",
   },
   {
-    id: 'b2',
-    title: 'Why Math Still Matters in AI',
-    excerpt: 'AI is powerful, but math helps you understand what is happening behind the model.',
-    content: 'Linear algebra, probability, calculus, and optimization are foundations of machine learning.'
-  }
+    title: "Why Mathematics Matters in the Age of AI",
+    category: "Mathematics",
+    author: "Nigussie Guluma",
+    date: "June 2026",
+    excerpt:
+      "AI is powerful, but mathematics helps us understand how models learn, predict, and make decisions.",
+  },
+  {
+    title: "What Is Microsoft Fabric?",
+    category: "Microsoft Fabric",
+    author: "Nigussie Guluma",
+    date: "June 2026",
+    excerpt:
+      "A simple introduction to lakehouses, pipelines, notebooks, analytics engineering, and modern data platforms.",
+  },
+  {
+    title: "Python Projects Every Beginner Should Build",
+    category: "Python",
+    author: "Nigussie Guluma",
+    date: "June 2026",
+    excerpt:
+      "Build confidence with beginner projects like calculators, quiz apps, data cleaners, and simple dashboards.",
+  },
 ];
 
 export default function Blog() {
-  const [posts, setPosts] = useState(fallbackPosts);
-
-  useEffect(() => {
-    async function fetchPosts() {
-      const { data } = await supabase.from('blog_posts').select('*').eq('published', true).order('created_at', { ascending: false });
-      if (data?.length) setPosts(data);
-    }
-    fetchPosts();
-  }, []);
-
   return (
     <section className="section py-16">
-      <h1 className="text-4xl font-extrabold">Blog</h1>
-      <p className="mt-4 max-w-3xl text-lg text-slate-600">
-        Articles about math, coding, analytics, AI projects, and career growth.
-      </p>
+      <div className="max-w-3xl">
+        <p className="text-sm font-semibold uppercase tracking-wide text-blue-600">
+          Blog
+        </p>
 
-      <div className="mt-10 grid gap-6 md:grid-cols-2">
+        <h1 className="mt-3 text-4xl font-extrabold tracking-tight text-slate-900 md:text-5xl">
+          Articles for learners, builders, and career changers.
+        </h1>
+
+        <p className="mt-6 text-lg leading-8 text-slate-600">
+          Read practical articles about mathematics, programming, data analytics,
+          Power BI, Microsoft Fabric, artificial intelligence, and career growth.
+        </p>
+      </div>
+
+      <div className="mt-12 grid gap-6 md:grid-cols-2">
         {posts.map((post) => (
-          <article key={post.id} className="card p-6">
-            <h2 className="text-2xl font-bold">{post.title}</h2>
-            <p className="mt-3 text-slate-600">{post.excerpt}</p>
-            <p className="mt-5 text-slate-700">{post.content}</p>
+          <article key={post.title} className="card p-6">
+            <span className="rounded-full bg-blue-50 px-3 py-1 text-xs font-bold text-blue-700">
+              {post.category}
+            </span>
+
+            <h2 className="mt-5 text-2xl font-bold text-slate-900">
+              {post.title}
+            </h2>
+
+            <div className="mt-4 flex flex-wrap gap-4 text-sm text-slate-500">
+              <span className="flex items-center gap-2">
+                <User size={16} />
+                {post.author}
+              </span>
+
+              <span className="flex items-center gap-2">
+                <Calendar size={16} />
+                {post.date}
+              </span>
+            </div>
+
+            <p className="mt-5 leading-7 text-slate-600">{post.excerpt}</p>
+
+            <Link
+              to="/blog"
+              className="mt-6 inline-flex items-center font-bold text-blue-600"
+            >
+              Read Article
+              <ArrowRight size={18} className="ml-2" />
+            </Link>
           </article>
         ))}
       </div>

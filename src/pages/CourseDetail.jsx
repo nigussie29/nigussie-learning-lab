@@ -1,204 +1,176 @@
-import { useEffect, useState } from 'react';
-import { Link, useParams } from 'react-router-dom';
-import { Download } from 'lucide-react';
-import { supabase } from '../lib/supabaseClient';
-import { fallbackCourses } from '../lib/courseData';
-import useAuth from '../hooks/useAuth';
+import { Link } from "react-router-dom";
+import {
+  Clock,
+  BookOpen,
+  Award,
+  CheckCircle,
+  PlayCircle,
+} from "lucide-react";
+
+const lessons = [
+  "Introduction to Python",
+  "Installing Python",
+  "Variables and Data Types",
+  "Input and Output",
+  "Conditional Statements",
+  "Loops",
+  "Functions",
+  "Lists and Tuples",
+  "Dictionaries",
+  "Final Project",
+];
 
 export default function CourseDetail() {
-  const { slug } = useParams();
-  const { session } = useAuth();
-
-  const [course, setCourse] = useState(null);
-  const [lessons, setLessons] = useState([]);
-  const [resources, setResources] = useState([]);
-  const [message, setMessage] = useState('');
-
-  useEffect(() => {
-    async function fetchCourse() {
-      const { data, error } = await supabase
-        .from('courses')
-        .select('*')
-        .eq('slug', slug)
-        .single();
-
-      if (error) {
-        console.error('Course fetch error:', error);
-      }
-
-      const selected = data || fallbackCourses.find((item) => item.slug === slug);
-      setCourse(selected || null);
-
-      if (selected?.id && !String(selected.id).startsWith('fallback')) {
-        const { data: lessonData, error: lessonError } = await supabase
-          .from('lessons')
-          .select('*')
-          .eq('course_id', selected.id)
-          .order('order_index');
-
-        if (lessonError) {
-          console.error('Lessons fetch error:', lessonError);
-        }
-
-        setLessons(lessonData || []);
-
-        const { data: resourceData, error: resourceError } = await supabase
-          .from('resources')
-          .select('*')
-          .eq('course_id', selected.id)
-          .order('created_at', { ascending: false });
-
-        if (resourceError) {
-          console.error('Resources fetch error:', resourceError);
-        }
-
-        setResources(resourceData || []);
-      }
-    }
-
-    fetchCourse();
-  }, [slug]);
-
-  async function enroll() {
-    if (!session) {
-      setMessage('Please login or register first.');
-      return;
-    }
-
-    if (!course?.id) {
-      setMessage('Course information is still loading. Please try again.');
-      return;
-    }
-
-    const { error } = await supabase.from('enrollments').insert({
-      user_id: session.user.id,
-      course_id: course.id
-    });
-
-    if (error) {
-      if (error.message.includes('duplicate key')) {
-        setMessage('You are already enrolled in this course. Go to your dashboard.');
-      } else {
-        setMessage(error.message);
-      }
-    } else {
-      setMessage('You are enrolled. Go to your dashboard.');
-    }
-  }
-
-  if (!course) {
-    return <section className="section py-16">Course not found.</section>;
-  }
-
   return (
     <section className="section py-16">
-      <div className="grid gap-10 lg:grid-cols-3">
-        <div className="lg:col-span-2">
-          <img
-            src={course.image_url}
-            alt={course.title}
-            className="h-72 w-full rounded-3xl object-cover"
-          />
+      <div className="grid gap-12 lg:grid-cols-[2fr_1fr]">
 
-          <h1 className="mt-8 text-4xl font-extrabold">{course.title}</h1>
+        {/* Left Side */}
 
-          <p className="mt-4 text-lg leading-8 text-slate-600">
-            {course.description}
+        <div>
+
+          <span className="rounded-full bg-blue-100 px-4 py-2 text-sm font-semibold text-blue-700">
+            Programming
+          </span>
+
+          <h1 className="mt-5 text-5xl font-extrabold text-slate-900">
+            Python for Beginners
+          </h1>
+
+          <p className="mt-6 text-lg leading-8 text-slate-600">
+            Learn Python from the ground up by building practical projects.
+            This course is designed for complete beginners who want to
+            transition into programming, data analytics, AI, or software
+            development.
           </p>
 
-          <div className="mt-10">
-            <h2 className="text-2xl font-bold">Lessons</h2>
+          <div className="mt-8 flex flex-wrap gap-6">
 
-            <div className="mt-4 space-y-3">
-              {lessons.length === 0 ? (
-                <p className="text-slate-600">
-                  Lessons will appear here after you add them.
-                </p>
-              ) : (
-                lessons.map((lesson) => (
-                  <Link
-                    key={lesson.id}
-                    to={`/lessons/${lesson.id}`}
-                    className="block rounded-2xl border border-slate-200 bg-white p-4 hover:border-brand-500"
-                  >
-                    <span className="font-semibold">
-                      {lesson.order_index}. {lesson.title}
+            <div className="flex items-center gap-2">
+              <Clock size={20} className="text-blue-600" />
+              <span>6 Weeks</span>
+            </div>
+
+            <div className="flex items-center gap-2">
+              <BookOpen size={20} className="text-blue-600" />
+              <span>24 Lessons</span>
+            </div>
+
+            <div className="flex items-center gap-2">
+              <Award size={20} className="text-blue-600" />
+              <span>Certificate Included</span>
+            </div>
+
+          </div>
+
+          <div className="mt-12">
+
+            <h2 className="text-3xl font-bold">
+              What You'll Learn
+            </h2>
+
+            <div className="mt-6 grid gap-4 md:grid-cols-2">
+
+              {[
+                "Python Fundamentals",
+                "Programming Logic",
+                "Functions",
+                "Loops",
+                "Lists",
+                "Dictionaries",
+                "File Handling",
+                "Mini Projects",
+              ].map((item) => (
+                <div
+                  key={item}
+                  className="flex items-center gap-3 rounded-xl bg-slate-50 p-4"
+                >
+                  <CheckCircle className="text-green-600" size={20} />
+                  {item}
+                </div>
+              ))}
+
+            </div>
+
+          </div>
+
+          <div className="mt-14">
+
+            <h2 className="text-3xl font-bold">
+              Course Curriculum
+            </h2>
+
+            <div className="mt-6 space-y-4">
+
+              {lessons.map((lesson, index) => (
+                <div
+                  key={lesson}
+                  className="card flex items-center justify-between p-5"
+                >
+                  <div className="flex items-center gap-4">
+                    <PlayCircle className="text-blue-600" />
+                    <span>
+                      Lesson {index + 1}: {lesson}
                     </span>
-                    <p className="mt-1 text-sm text-slate-600">
-                      {lesson.description}
-                    </p>
-                  </Link>
-                ))
-              )}
-            </div>
-          </div>
-
-          <div className="mt-10">
-            <h2 className="text-2xl font-bold">Downloadable Resources</h2>
-
-            <div className="mt-4 space-y-3">
-              {resources.length === 0 ? (
-                <p className="text-slate-600">
-                  Downloadable PDFs and worksheets will appear here soon.
-                </p>
-              ) : (
-                resources.map((resource) => (
-                  <div
-                    key={resource.id}
-                    className="flex flex-col gap-4 rounded-2xl border border-slate-200 bg-white p-4 sm:flex-row sm:items-center sm:justify-between"
-                  >
-                    <div>
-                      <h3 className="font-semibold">{resource.title}</h3>
-                      <p className="mt-1 text-sm text-slate-600">
-                        {resource.description}
-                      </p>
-                    </div>
-
-                    <a
-                      href={resource.file_url}
-                      target="_blank"
-                      rel="noreferrer"
-                      className="btn-primary"
-                    >
-                      <Download className="mr-2" size={18} />
-                      Download
-                    </a>
                   </div>
-                ))
-              )}
+
+                  <span className="text-sm text-slate-500">
+                    15 min
+                  </span>
+                </div>
+              ))}
+
             </div>
+
           </div>
+
         </div>
 
-        <aside className="card h-fit p-6">
-          <h2 className="text-xl font-bold">Course Information</h2>
+        {/* Right Side */}
 
-          <div className="mt-4 space-y-3 text-slate-700">
-            <p>
-              <strong>Category:</strong> {course.category}
-            </p>
-            <p>
-              <strong>Level:</strong> {course.level}
-            </p>
-            <p>
-              <strong>Duration:</strong> {course.duration || 'Self-paced'}
-            </p>
-            <p>
-              <strong>Price:</strong>{' '}
-              {course.price > 0 ? `$${course.price}` : 'Free preview'}
-            </p>
+        <div>
+
+          <div className="sticky top-24 rounded-3xl border bg-white p-8 shadow-lg">
+
+            <div className="aspect-video rounded-2xl bg-slate-200 flex items-center justify-center">
+              Course Preview
+            </div>
+
+            <h3 className="mt-6 text-3xl font-bold">
+              Free
+            </h3>
+
+            <button className="mt-6 w-full rounded-xl bg-blue-600 py-3 font-bold text-white hover:bg-blue-700">
+              Enroll Now
+            </button>
+
+            <Link
+              to="/courses"
+              className="mt-4 block text-center font-semibold text-blue-600"
+            >
+              ← Back to Courses
+            </Link>
+
+            <hr className="my-8" />
+
+            <h4 className="font-bold">
+              This Course Includes
+            </h4>
+
+            <ul className="mt-4 space-y-3 text-slate-600">
+              <li>✔ 24 Video Lessons</li>
+              <li>✔ Downloadable PDFs</li>
+              <li>✔ Practice Exercises</li>
+              <li>✔ Quizzes</li>
+              <li>✔ Final Project</li>
+              <li>✔ Certificate of Completion</li>
+              <li>✔ Lifetime Access</li>
+            </ul>
+
           </div>
 
-          <button onClick={enroll} className="btn-primary mt-6 w-full">
-            Register for Course
-          </button>
+        </div>
 
-          {message && (
-            <p className="mt-4 rounded-xl bg-brand-50 p-3 text-sm text-brand-700">
-              {message}
-            </p>
-          )}
-        </aside>
       </div>
     </section>
   );
