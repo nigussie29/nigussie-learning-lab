@@ -89,10 +89,12 @@ export default function CourseDetail() {
             <p className="mt-4 text-slate-600">
               Start learning today and build real career-ready skills.
             </p>
-
-            <button className="mt-6 w-full rounded-xl bg-blue-600 py-3 font-bold text-white hover:bg-blue-700">
-              Enroll Now
-            </button>
+<Link
+  to="/lessons/1"
+  className="mt-6 block w-full rounded-xl bg-blue-600 py-3 text-center font-bold text-white hover:bg-blue-700"
+>
+  Start First Lesson
+</Link>
 
             <Link
               to="/dashboard"
