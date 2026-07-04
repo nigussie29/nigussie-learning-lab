@@ -1,3 +1,5 @@
+
+import MasteryProgress from "../components/MasteryProgress";
 import { Link } from "react-router-dom";
 import {
   FaBookOpen,
@@ -36,15 +38,20 @@ export default function Dashboard() {
             </div>
           ))}
         </section>
+               <section className="mt-8">
+  <MasteryProgress />
+</section>
 
         <section className="mt-8 grid gap-8 lg:grid-cols-3">
           <div className="lg:col-span-2 rounded-3xl bg-white p-8 shadow-sm">
             <h2 className="text-2xl font-extrabold text-slate-900">
+       
               Continue Learning
             </h2>
 
             <div className="mt-6 rounded-2xl border border-slate-200 p-6">
               <p className="text-sm font-bold uppercase tracking-wide text-blue-600">
+
                 Python for Beginners
               </p>
               <h3 className="mt-2 text-2xl font-extrabold text-slate-950">
