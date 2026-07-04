@@ -1,50 +1,98 @@
-import { useEffect, useState } from 'react';
-import { Link } from 'react-router-dom';
-import { supabase } from '../lib/supabaseClient';
-import useAuth from '../hooks/useAuth';
+import { Link } from "react-router-dom";
+import {
+  FaBookOpen,
+  FaCertificate,
+  FaClock,
+  FaFire,
+  FaStar,
+  FaTrophy,
+} from "react-icons/fa";
 
 export default function Dashboard() {
-  const { session, profile } = useAuth();
-  const [enrollments, setEnrollments] = useState([]);
-
-  useEffect(() => {
-    async function fetchEnrollments() {
-      if (!session?.user?.id) return;
-      const { data } = await supabase
-        .from('enrollments')
-        .select('*, courses(*)')
-        .eq('user_id', session.user.id)
-        .order('created_at', { ascending: false });
-
-      setEnrollments(data || []);
-    }
-    fetchEnrollments();
-  }, [session]);
-
   return (
-    <section className="section py-16">
-      <h1 className="text-4xl font-extrabold">Student Dashboard</h1>
-      <p className="mt-3 text-slate-600">Welcome, {profile?.full_name || session?.user?.email}.</p>
+    <main className="min-h-screen bg-slate-50 px-6 py-10">
+      <div className="mx-auto max-w-7xl">
+        <section className="rounded-3xl bg-gradient-to-br from-blue-700 to-indigo-800 p-8 text-white">
+          <p className="text-blue-200 font-bold">Student Dashboard</p>
+          <h1 className="mt-3 text-4xl font-extrabold">
+            Welcome back, Nigussie 👋
+          </h1>
+          <p className="mt-3 max-w-2xl text-blue-100">
+            Continue your learning journey with SkillBridge Academy powered by Luminery.
+          </p>
+        </section>
 
-      <div className="mt-10">
-        <h2 className="text-2xl font-bold">My Courses</h2>
-        {enrollments.length === 0 ? (
-          <div className="card mt-5 p-6">
-            <p className="text-slate-600">You are not enrolled yet.</p>
-            <Link to="/courses" className="btn-primary mt-4">Browse Courses</Link>
-          </div>
-        ) : (
-          <div className="mt-5 grid gap-5 md:grid-cols-2">
-            {enrollments.map((enrollment) => (
-              <div className="card p-6" key={enrollment.id}>
-                <h3 className="text-xl font-bold">{enrollment.courses?.title}</h3>
-                <p className="mt-2 text-slate-600">{enrollment.courses?.short_description}</p>
-                <Link to={`/courses/${enrollment.courses?.slug}`} className="btn-primary mt-5">Continue</Link>
+        <section className="mt-8 grid gap-4 md:grid-cols-4">
+          {[
+            [<FaBookOpen />, "Courses", "4"],
+            [<FaClock />, "Hours Learned", "12.5"],
+            [<FaCertificate />, "Certificates", "1"],
+            [<FaFire />, "Streak", "7 days"],
+          ].map(([icon, label, value]) => (
+            <div key={label} className="rounded-2xl bg-white p-6 shadow-sm">
+              <div className="text-2xl text-blue-600">{icon}</div>
+              <p className="mt-4 text-sm font-semibold text-slate-500">{label}</p>
+              <p className="mt-1 text-3xl font-extrabold text-slate-950">{value}</p>
+            </div>
+          ))}
+        </section>
+
+        <section className="mt-8 grid gap-8 lg:grid-cols-3">
+          <div className="lg:col-span-2 rounded-3xl bg-white p-8 shadow-sm">
+            <h2 className="text-2xl font-extrabold text-slate-900">
+              Continue Learning
+            </h2>
+
+            <div className="mt-6 rounded-2xl border border-slate-200 p-6">
+              <p className="text-sm font-bold uppercase tracking-wide text-blue-600">
+                Python for Beginners
+              </p>
+              <h3 className="mt-2 text-2xl font-extrabold text-slate-950">
+                Lesson 1: Introduction to Python
+              </h3>
+
+              <div className="mt-5 h-3 overflow-hidden rounded-full bg-slate-200">
+                <div className="h-full w-[20%] rounded-full bg-blue-600"></div>
               </div>
-            ))}
+
+              <p className="mt-3 text-sm font-semibold text-slate-600">
+                20% completed
+              </p>
+
+              <Link
+                to="/lessons/1"
+                className="mt-6 inline-block rounded-xl bg-blue-600 px-6 py-3 font-bold text-white hover:bg-blue-700"
+              >
+                Continue Lesson →
+              </Link>
+            </div>
           </div>
-        )}
+
+          <aside className="rounded-3xl bg-white p-8 shadow-sm">
+            <h2 className="text-2xl font-extrabold text-slate-900">
+              Achievements
+            </h2>
+
+            <div className="mt-6 space-y-4">
+              <div className="flex items-center gap-4 rounded-2xl bg-slate-50 p-4">
+                <FaTrophy className="text-2xl text-yellow-500" />
+                <div>
+                  <p className="font-bold text-slate-900">First Lesson</p>
+                  <p className="text-sm text-slate-600">Completed your first lesson</p>
+                </div>
+              </div>
+
+              <div className="flex items-center gap-4 rounded-2xl bg-slate-50 p-4">
+                <FaStar className="text-2xl text-blue-600" />
+                <div>
+                  <p className="font-bold text-slate-900">Fast Starter</p>
+                  <p className="text-sm text-slate-600">Started learning this week</p>
+                </div>
+              </div>
+            </div>
+          </aside>
+        </section>
       </div>
-    </section>
+    </main>
   );
 }
