@@ -1,5 +1,6 @@
 
 import MasteryProgress from "../components/luminery/MasteryProgress";
+import LearningAnalytics from "../components/luminery/LearningAnalytics";
 import GuidanceCard from "../components/luminery/GuidanceCard";
 import MasteryBadge from "../components/luminery/MasteryBadge";
 import { Link } from "react-router-dom";
@@ -103,6 +104,9 @@ export default function Dashboard() {
 </div>
           </aside>
         </section>
+        <section className="mt-8">
+  <LearningAnalytics />
+</section>
       </div>
     </main>
   );
