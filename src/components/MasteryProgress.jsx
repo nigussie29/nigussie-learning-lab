@@ -14,6 +14,17 @@ export default function MasteryProgress({ scores }) {
   const overall =
     Object.values(masteryScores).reduce((sum, score) => sum + score, 0) /
     Object.values(masteryScores).length;
+    let masteryLevel = "Getting Started";
+
+if (overall >= 90) {
+  masteryLevel = "Expert";
+} else if (overall >= 75) {
+  masteryLevel = "Master";
+} else if (overall >= 60) {
+  masteryLevel = "Developing";
+} else if (overall >= 40) {
+  masteryLevel = "Beginner";
+}
 
   return (
     <div className="rounded-3xl border border-slate-200 bg-white p-6 shadow-sm">
@@ -33,6 +44,15 @@ export default function MasteryProgress({ scores }) {
           Overall Mastery
         </p>
       </div>
+      <div className="mt-6 rounded-2xl bg-blue-50 p-5">
+  <p className="text-sm font-bold uppercase tracking-wide text-blue-600">
+    Mastery Level
+  </p>
+
+  <h3 className="mt-2 text-2xl font-extrabold text-slate-900">
+    {masteryLevel}
+  </h3>
+</div>
 
       <div className="mt-6 space-y-5">
         {masteryStages.map((stage) => {
