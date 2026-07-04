@@ -3,7 +3,7 @@ import { FaCheckCircle, FaClock, FaCode, FaFileAlt, FaQuestionCircle } from "rea
 import VideoPlayer from "../components/VideoPlayer";
 import { lessons } from "../data/lessons";
 import { courses } from "../data/courses";
-
+import LumineryTutor from "../components/LumineryTutor";
 export default function LessonPage() {
   const { lessonId } = useParams();
 
@@ -137,6 +137,13 @@ export default function LessonPage() {
             >
               Go to Dashboard
             </Link>
+            <div className="mt-8">
+           <LumineryTutor
+             courseTitle={course?.title}
+              lessonTitle={lesson.title}
+    
+             />
+           </div>
           </aside>
         </div>
       </div>
