@@ -1,177 +1,108 @@
-import { Link } from "react-router-dom";
-import {
-  Clock,
-  BookOpen,
-  Award,
-  CheckCircle,
-  PlayCircle,
-} from "lucide-react";
-
-const lessons = [
-  "Introduction to Python",
-  "Installing Python",
-  "Variables and Data Types",
-  "Input and Output",
-  "Conditional Statements",
-  "Loops",
-  "Functions",
-  "Lists and Tuples",
-  "Dictionaries",
-  "Final Project",
-];
+import { useParams, Link } from "react-router-dom";
+import { FaClock, FaBookOpen, FaUsers, FaStar, FaCheckCircle } from "react-icons/fa";
+import { courses } from "../data/courses";
 
 export default function CourseDetail() {
+  const { id } = useParams();
+  const course = courses.find((item) => item.id === id);
+
+  if (!course) {
+    return (
+      <main className="min-h-screen bg-slate-50 px-6 py-20 text-center">
+        <h1 className="text-3xl font-bold text-slate-900">Course not found</h1>
+        <Link to="/courses" className="mt-6 inline-block text-blue-600 font-bold">
+          Back to Courses
+        </Link>
+      </main>
+    );
+  }
+
   return (
-    <section className="section py-16">
-      <div className="grid gap-12 lg:grid-cols-[2fr_1fr]">
-
-        {/* Left Side */}
-
-        <div>
-
-          <span className="rounded-full bg-blue-100 px-4 py-2 text-sm font-semibold text-blue-700">
-            Programming
-          </span>
-
-          <h1 className="mt-5 text-5xl font-extrabold text-slate-900">
-            Python for Beginners
-          </h1>
-
-          <p className="mt-6 text-lg leading-8 text-slate-600">
-            Learn Python from the ground up by building practical projects.
-            This course is designed for complete beginners who want to
-            transition into programming, data analytics, AI, or software
-            development.
+    <main className="min-h-screen bg-slate-50">
+      <section className="bg-gradient-to-br from-blue-700 to-indigo-800 px-6 py-20 text-white">
+        <div className="mx-auto max-w-7xl">
+          <p className="font-bold uppercase tracking-wide text-blue-200">
+            {course.category}
           </p>
 
-          <div className="mt-8 flex flex-wrap gap-6">
+          <h1 className="mt-4 max-w-4xl text-4xl font-extrabold md:text-6xl">
+            {course.title}
+          </h1>
 
-            <div className="flex items-center gap-2">
-              <Clock size={20} className="text-blue-600" />
-              <span>6 Weeks</span>
-            </div>
+          <p className="mt-6 max-w-3xl text-lg leading-8 text-blue-100">
+            {course.description}
+          </p>
 
-            <div className="flex items-center gap-2">
-              <BookOpen size={20} className="text-blue-600" />
-              <span>24 Lessons</span>
-            </div>
-
-            <div className="flex items-center gap-2">
-              <Award size={20} className="text-blue-600" />
-              <span>Certificate Included</span>
-            </div>
-
+          <div className="mt-8 flex flex-wrap gap-5 text-sm font-semibold">
+            <span className="flex items-center gap-2"><FaBookOpen /> {course.lessons} lessons</span>
+            <span className="flex items-center gap-2"><FaClock /> {course.weeks}</span>
+            <span className="flex items-center gap-2"><FaUsers /> {course.students}+ students</span>
+            <span className="flex items-center gap-2"><FaStar /> {course.rating}</span>
           </div>
+        </div>
+      </section>
 
-          <div className="mt-12">
+      <section className="px-6 py-14">
+        <div className="mx-auto grid max-w-7xl gap-8 lg:grid-cols-3">
+          <div className="lg:col-span-2">
+            <div className="rounded-3xl bg-white p-8 shadow-sm">
+              <h2 className="text-2xl font-extrabold text-slate-900">
+                What you will learn
+              </h2>
 
-            <h2 className="text-3xl font-bold">
-              What You'll Learn
-            </h2>
-
-            <div className="mt-6 grid gap-4 md:grid-cols-2">
-
-              {[
-                "Python Fundamentals",
-                "Programming Logic",
-                "Functions",
-                "Loops",
-                "Lists",
-                "Dictionaries",
-                "File Handling",
-                "Mini Projects",
-              ].map((item) => (
-                <div
-                  key={item}
-                  className="flex items-center gap-3 rounded-xl bg-slate-50 p-4"
-                >
-                  <CheckCircle className="text-green-600" size={20} />
-                  {item}
-                </div>
-              ))}
-
+              <div className="mt-6 grid gap-4 md:grid-cols-2">
+                {course.skills.map((skill) => (
+                  <p key={skill} className="flex items-center gap-3 text-slate-700">
+                    <FaCheckCircle className="text-green-600" />
+                    {skill}
+                  </p>
+                ))}
+              </div>
             </div>
 
-          </div>
+            <div className="mt-8 rounded-3xl bg-white p-8 shadow-sm">
+              <h2 className="text-2xl font-extrabold text-slate-900">
+                Course Curriculum
+              </h2>
 
-          <div className="mt-14">
-
-            <h2 className="text-3xl font-bold">
-              Course Curriculum
-            </h2>
-
-            <div className="mt-6 space-y-4">
-
-              {lessons.map((lesson, index) => (
-                <div
-                  key={lesson}
-                  className="card flex items-center justify-between p-5"
-                >
-                  <div className="flex items-center gap-4">
-                    <PlayCircle className="text-blue-600" />
-                    <span>
+              <div className="mt-6 space-y-3">
+                {course.curriculum.map((lesson, index) => (
+                  <div
+                    key={lesson}
+                    className="flex items-center justify-between rounded-xl border border-slate-200 p-4"
+                  >
+                    <span className="font-semibold text-slate-800">
                       Lesson {index + 1}: {lesson}
                     </span>
+                    <span className="text-sm text-slate-500">Preview</span>
                   </div>
-
-                  <span className="text-sm text-slate-500">
-                    15 min
-                  </span>
-                </div>
-              ))}
-
+                ))}
+              </div>
             </div>
-
           </div>
 
-        </div>
-
-        {/* Right Side */}
-
-        <div>
-
-          <div className="sticky top-24 rounded-3xl border bg-white p-8 shadow-lg">
-
-            <div className="aspect-video rounded-2xl bg-slate-200 flex items-center justify-center">
-              Course Preview
-            </div>
-
-            <h3 className="mt-6 text-3xl font-bold">
-              Free
+          <aside className="rounded-3xl bg-white p-8 shadow-sm">
+            <h3 className="text-2xl font-extrabold text-slate-900">
+              Enroll in this course
             </h3>
+
+            <p className="mt-4 text-slate-600">
+              Start learning today and build real career-ready skills.
+            </p>
 
             <button className="mt-6 w-full rounded-xl bg-blue-600 py-3 font-bold text-white hover:bg-blue-700">
               Enroll Now
             </button>
 
             <Link
-              to="/courses"
-              className="mt-4 block text-center font-semibold text-blue-600"
+              to="/dashboard"
+              className="mt-3 block w-full rounded-xl border border-slate-300 py-3 text-center font-bold text-slate-700 hover:bg-slate-50"
             >
-              ← Back to Courses
+              Go to Dashboard
             </Link>
-
-            <hr className="my-8" />
-
-            <h4 className="font-bold">
-              This Course Includes
-            </h4>
-
-            <ul className="mt-4 space-y-3 text-slate-600">
-              <li>✔ 24 Video Lessons</li>
-              <li>✔ Downloadable PDFs</li>
-              <li>✔ Practice Exercises</li>
-              <li>✔ Quizzes</li>
-              <li>✔ Final Project</li>
-              <li>✔ Certificate of Completion</li>
-              <li>✔ Lifetime Access</li>
-            </ul>
-
-          </div>
-
+          </aside>
         </div>
-
-      </div>
-    </section>
+      </section>
+    </main>
   );
 }
