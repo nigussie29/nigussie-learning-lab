@@ -1,13 +1,14 @@
 
-import MasteryProgress from "../components/MasteryProgress";
+import MasteryProgress from "../components/luminery/MasteryProgress";
+import GuidanceCard from "../components/luminery/GuidanceCard";
+import MasteryBadge from "../components/luminery/MasteryBadge";
 import { Link } from "react-router-dom";
 import {
   FaBookOpen,
   FaCertificate,
   FaClock,
   FaFire,
-  FaStar,
-  FaTrophy,
+  
 } from "react-icons/fa";
 
 export default function Dashboard() {
@@ -40,6 +41,9 @@ export default function Dashboard() {
         </section>
                <section className="mt-8">
   <MasteryProgress />
+</section>
+<section className="mt-8">
+  <GuidanceCard />
 </section>
 
         <section className="mt-8 grid gap-8 lg:grid-cols-3">
@@ -80,23 +84,23 @@ export default function Dashboard() {
               Achievements
             </h2>
 
-            <div className="mt-6 space-y-4">
-              <div className="flex items-center gap-4 rounded-2xl bg-slate-50 p-4">
-                <FaTrophy className="text-2xl text-yellow-500" />
-                <div>
-                  <p className="font-bold text-slate-900">First Lesson</p>
-                  <p className="text-sm text-slate-600">Completed your first lesson</p>
-                </div>
-              </div>
+           <div className="mt-6 space-y-4">
+  <MasteryBadge
+    title="First Lesson"
+    description="Completed your first lesson."
+  />
 
-              <div className="flex items-center gap-4 rounded-2xl bg-slate-50 p-4">
-                <FaStar className="text-2xl text-blue-600" />
-                <div>
-                  <p className="font-bold text-slate-900">Fast Starter</p>
-                  <p className="text-sm text-slate-600">Started learning this week</p>
-                </div>
-              </div>
-            </div>
+  <MasteryBadge
+    title="Fast Starter"
+    description="Started learning this week."
+  />
+
+  <MasteryBadge
+    title="Project Builder"
+    description="Ready to build your first project."
+    color="bg-yellow-50"
+  />
+</div>
           </aside>
         </section>
       </div>

@@ -1,4 +1,4 @@
-import { masteryStages } from "../data/masteryLevels";
+import { masteryStages } from "../../data/masteryLevels";
 
 export default function MasteryProgress({ scores }) {
   const defaultScores = {
@@ -44,6 +44,19 @@ if (overall >= 90) {
           Overall Mastery
         </p>
       </div>
+      <div className="mt-4 rounded-xl bg-yellow-50 border border-yellow-200 p-4">
+  <p className="text-sm font-bold uppercase tracking-wide text-yellow-700">
+    Mastery Points
+  </p>
+
+  <h3 className="mt-1 text-3xl font-extrabold text-yellow-600">
+    240 MP
+  </h3>
+
+  <p className="mt-1 text-sm text-slate-600">
+    Earn points by completing lessons, projects, and assessments.
+  </p>
+</div>
       <div className="mt-6 rounded-2xl bg-blue-50 p-5">
   <p className="text-sm font-bold uppercase tracking-wide text-blue-600">
     Mastery Level
