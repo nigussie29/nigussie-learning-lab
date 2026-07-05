@@ -1,3 +1,7 @@
+
+
+
+
 export const projects = [
   {
     id: "python-grade-calculator",
