@@ -1,7 +1,22 @@
+
+import { useState } from "react";
 import { projects } from "../data/projects";
 import ProjectCard from "../components/project/ProjectCard";
 
+
 export default function Projects() {
+    const [search, setSearch] = useState("");
+
+const filteredProjects = projects.filter((project) => {
+  const searchText = search.toLowerCase();
+
+  return (
+    project.title.toLowerCase().includes(searchText) ||
+    project.description.toLowerCase().includes(searchText) ||
+    project.category.toLowerCase().includes(searchText) ||
+    project.skills.join(" ").toLowerCase().includes(searchText)
+  );
+});
   return (
     <main className="min-h-screen bg-slate-50 px-6 py-10">
       <div className="mx-auto max-w-7xl">
@@ -29,15 +44,24 @@ export default function Projects() {
           <h2 className="text-3xl font-extrabold text-slate-900">
             Available Projects
           </h2>
+          <div className="mt-6">
+  <input
+    type="text"
+    value={search}
+    onChange={(e) => setSearch(e.target.value)}
+    placeholder="🔍 Search projects by title, category, or skill..."
+    className="w-full max-w-xl rounded-xl border border-slate-300 px-4 py-3 outline-none focus:border-blue-600"
+  />
+</div>
 
           <div className="mt-8 grid gap-6 md:grid-cols-2 xl:grid-cols-3">
 
-            {projects.map((project) => (
-  <ProjectCard
-    key={project.id}
-    project={project}
-  />
-))}
+            {filteredProjects.map((project) => (
+            <ProjectCard
+                key={project.id}
+                project={project}
+            />
+          ))}
 
           </div>
 
