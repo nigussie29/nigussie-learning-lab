@@ -14,6 +14,7 @@ import Auth from "./pages/Auth.jsx";
 import Dashboard from "./pages/Dashboard.jsx";
 import Admin from "./pages/Admin.jsx";
 import LessonPage from "./pages/LessonPage.jsx";
+import Projects from "./pages/Projects";
 
 import ProtectedRoute from "./components/ProtectedRoute.jsx";
 
@@ -33,6 +34,7 @@ export default function App() {
           <Route path="/blog" element={<Blog />} />
           <Route path="/contact" element={<Contact />} />
           <Route path="/login" element={<Auth />} />
+          <Route path="/projects" element={<Projects />} />
 
           <Route
             path="/dashboard"
