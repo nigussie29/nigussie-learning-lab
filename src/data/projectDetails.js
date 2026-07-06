@@ -1,3 +1,5 @@
+
+import BuildGuide from "../components/project/BuildGuide";
 export const projectDetails = {
   "student-grade-calculator": {
     id: "student-grade-calculator",
@@ -36,7 +38,13 @@ scenario:
       "VS Code",
       "Terminal",
     ],
-
+steps: [
+  "Create variables for student information",
+  "Accept scores from the user",
+  "Calculate the average score",
+  "Determine the letter grade",
+  "Display the final results",
+],
     portfolio:
       "Excellent beginner portfolio project demonstrating core programming skills.",
 

@@ -4,6 +4,7 @@ import RealWorldScenario from "../components/project/RealWorldScenario";
 import YourMission from "../components/project/YourMission";
 import AppliedMathSection from "../components/project/AppliedMathSection";
 import ToolboxSection from "../components/project/ToolboxSection";
+import BuildGuide from "../components/project/BuildGuide";
 
 export default function ProjectDetail() {
   const { id } = useParams();
@@ -54,6 +55,7 @@ export default function ProjectDetail() {
 <AppliedMathSection mathematics={project.mathematics} />
 
 <ToolboxSection technologies={project.technologies} />
+<BuildGuide steps={project.steps} />
       </div>
     </main>
   );
