@@ -1,6 +1,7 @@
 import { useParams, Link } from "react-router-dom";
 import { FaClock, FaBookOpen, FaUsers, FaStar, FaCheckCircle } from "react-icons/fa";
 import { courses } from "../data/courses";
+import ToolboxSection from "../components/project/ToolboxSection";
 
 export default function CourseDetail() {
   const { id } = useParams();
