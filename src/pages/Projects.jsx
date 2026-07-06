@@ -6,16 +6,30 @@ import ProjectCard from "../components/project/ProjectCard";
 
 export default function Projects() {
     const [search, setSearch] = useState("");
+    const [selectedCategory, setSelectedCategory] = useState("All");
+    const categories = [
+  "All",
+  "Python",
+  "Power BI",
+  "SQL",
+  "AI",
+  "Applied Mathematics",
+  "Robotics",
+];
 
 const filteredProjects = projects.filter((project) => {
   const searchText = search.toLowerCase();
 
-  return (
+  const matchesSearch =
     project.title.toLowerCase().includes(searchText) ||
     project.description.toLowerCase().includes(searchText) ||
     project.category.toLowerCase().includes(searchText) ||
-    project.skills.join(" ").toLowerCase().includes(searchText)
-  );
+    project.skills.join(" ").toLowerCase().includes(searchText);
+
+  const matchesCategory =
+    selectedCategory === "All" || project.category === selectedCategory;
+
+  return matchesSearch && matchesCategory;
 });
   return (
     <main className="min-h-screen bg-slate-50 px-6 py-10">
@@ -52,6 +66,21 @@ const filteredProjects = projects.filter((project) => {
     placeholder="🔍 Search projects by title, category, or skill..."
     className="w-full max-w-xl rounded-xl border border-slate-300 px-4 py-3 outline-none focus:border-blue-600"
   />
+  <div className="mt-5 flex flex-wrap gap-2">
+  {categories.map((category) => (
+    <button
+      key={category}
+      onClick={() => setSelectedCategory(category)}
+      className={`rounded-full border px-4 py-2 text-sm font-semibold ${
+        selectedCategory === category
+          ? "border-blue-600 bg-blue-600 text-white"
+          : "border-slate-300 bg-white text-slate-700 hover:border-blue-600"
+      }`}
+    >
+      {category}
+    </button>
+  ))}
+</div>
 </div>
 
           <div className="mt-8 grid gap-6 md:grid-cols-2 xl:grid-cols-3">

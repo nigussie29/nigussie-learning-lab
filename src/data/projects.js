@@ -4,7 +4,7 @@
 
 export const projects = [
   {
-    id: "python-grade-calculator",
+    id: "student-grade-calculator",
     title: "Student Grade Calculator",
     category: "Python",
     level: "Beginner",

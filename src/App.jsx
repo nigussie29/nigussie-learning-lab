@@ -15,6 +15,7 @@ import Dashboard from "./pages/Dashboard.jsx";
 import Admin from "./pages/Admin.jsx";
 import LessonPage from "./pages/LessonPage.jsx";
 import Projects from "./pages/Projects";
+import ProjectDetail from "./pages/ProjectDetail.jsx";
 
 import ProtectedRoute from "./components/ProtectedRoute.jsx";
 
@@ -53,6 +54,11 @@ export default function App() {
               </ProtectedRoute>
             }
           />
+          <Route 
+          path="/projects/:id"
+           element={<ProjectDetail />
+        } 
+        />
         </Routes>
       </main>
 

@@ -1,3 +1,4 @@
+import { Link } from "react-router-dom";
 export default function ProjectCard({ project }) {
   return (
     <div className="rounded-3xl bg-white p-6 shadow-sm transition hover:shadow-lg">
@@ -39,10 +40,14 @@ export default function ProjectCard({ project }) {
           </span>
         ))}
       </div>
-
-      <button className="mt-8 w-full rounded-xl bg-blue-600 py-3 font-bold text-white hover:bg-blue-700">
-        View Project
-      </button>
+<Link
+  to={`/projects/${project.id}`}
+  className="mt-8 block w-full rounded-xl bg-blue-600 py-3 text-center font-bold text-white hover:bg-blue-700"
+>
+  View Project
+</Link>
+      
+      
     </div>
   );
 }
