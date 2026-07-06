@@ -1,5 +1,5 @@
 
-import BuildGuide from "../components/project/BuildGuide";
+
 export const projectDetails = {
   "student-grade-calculator": {
     id: "student-grade-calculator",
@@ -44,6 +44,19 @@ steps: [
   "Calculate the average score",
   "Determine the letter grade",
   "Display the final results",
+],
+tips: [
+  "Break the project into small tasks before writing code.",
+  "Test one function at a time.",
+  "Use meaningful variable names.",
+  "Debug early instead of waiting until the end.",
+  "Practice explaining your solution to someone else.",
+],
+careers: [
+  "Python Developer",
+  "Software Engineer",
+  "Data Analyst",
+  "Problem Solver",
 ],
     portfolio:
       "Excellent beginner portfolio project demonstrating core programming skills.",

@@ -5,6 +5,9 @@ import YourMission from "../components/project/YourMission";
 import AppliedMathSection from "../components/project/AppliedMathSection";
 import ToolboxSection from "../components/project/ToolboxSection";
 import BuildGuide from "../components/project/BuildGuide";
+import LumineryCoach from "../components/project/LumineryCoach";
+import CareerValue from "../components/project/CareerValue";
+import NextMission from "../components/project/NextMission";
 
 export default function ProjectDetail() {
   const { id } = useParams();
@@ -49,13 +52,16 @@ export default function ProjectDetail() {
           </div>
         </section>
         <RealWorldScenario scenario={project.scenario} />
-<YourMission objectives={project.objectives} />
+        <YourMission objectives={project.objectives} />
 
 
-<AppliedMathSection mathematics={project.mathematics} />
+        <AppliedMathSection mathematics={project.mathematics} />
 
-<ToolboxSection technologies={project.technologies} />
-<BuildGuide steps={project.steps} />
+        <ToolboxSection technologies={project.technologies} />
+        <BuildGuide steps={project.steps} />
+        <LumineryCoach tips={project.tips} />
+        <CareerValue careers={project.careers} />
+        <NextMission nextProject={project.nextProject} />
       </div>
     </main>
   );
