@@ -1,6 +1,7 @@
 import { Link, useParams } from "react-router-dom";
 import { projectDetails } from "../data/projectDetails";
 import RealWorldScenario from "../components/project/RealWorldScenario";
+import YourMission from "../components/project/YourMission";
 
 export default function ProjectDetail() {
   const { id } = useParams();
@@ -45,6 +46,7 @@ export default function ProjectDetail() {
           </div>
         </section>
         <RealWorldScenario scenario={project.scenario} />
+<YourMission objectives={project.objectives} />
       </div>
     </main>
   );
