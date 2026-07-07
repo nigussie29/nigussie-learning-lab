@@ -1,4 +1,5 @@
 import { Routes, Route } from "react-router-dom";
+import Portfolio from './pages/Portfolio.jsx';
 
 import Navbar from "./components/Navbar.jsx";
 import Footer from "./components/Footer.jsx";
@@ -36,6 +37,7 @@ export default function App() {
           <Route path="/contact" element={<Contact />} />
           <Route path="/login" element={<Auth />} />
           <Route path="/projects" element={<Projects />} />
+          <Route path="/portfolio" element={<Portfolio />} />
 
           <Route
             path="/dashboard"
