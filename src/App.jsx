@@ -19,6 +19,8 @@ import Projects from "./pages/Projects";
 import ProjectDetail from "./pages/ProjectDetail.jsx";
 import LessonEnginePage from "./pages/LessonEnginePage.jsx";
 import ProtectedRoute from "./components/ProtectedRoute.jsx";
+import LinearAlgebraCoursePage from "./pages/LinearAlgebraCoursePage.jsx";
+import MasteryPage from "./pages/MasteryPage.jsx";
 
 export default function App() {
   return (
@@ -57,11 +59,19 @@ export default function App() {
               </ProtectedRoute>
             }
           />
+          <Route
+  path="/courses/linear-algebra-foundations"
+  element={<LinearAlgebraCoursePage />}
+/>
           <Route 
           path="/projects/:id"
            element={<ProjectDetail />
         } 
         />
+        <Route 
+        path="/mastery" 
+        element={<MasteryPage />}
+         />
         </Routes>
       </main>
 
