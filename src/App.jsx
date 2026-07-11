@@ -17,7 +17,7 @@ import Admin from "./pages/Admin.jsx";
 import LessonPage from "./pages/LessonPage.jsx";
 import Projects from "./pages/Projects";
 import ProjectDetail from "./pages/ProjectDetail.jsx";
-
+import LessonEnginePage from "./pages/LessonEnginePage.jsx";
 import ProtectedRoute from "./components/ProtectedRoute.jsx";
 
 export default function App() {
@@ -37,6 +37,7 @@ export default function App() {
           <Route path="/contact" element={<Contact />} />
           <Route path="/login" element={<Auth />} />
           <Route path="/projects" element={<Projects />} />
+          <Route path="/lesson-engine" element={<LessonEnginePage />} />
           <Route path="/portfolio" element={<Portfolio />} />
 
           <Route
