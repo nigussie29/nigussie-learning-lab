@@ -21,7 +21,17 @@ import LessonEnginePage from "./pages/LessonEnginePage.jsx";
 import ProtectedRoute from "./components/ProtectedRoute.jsx";
 import LinearAlgebraCoursePage from "./pages/LinearAlgebraCoursePage.jsx";
 import MasteryPage from "./pages/MasteryPage.jsx";
-
+import InstructorPage from "./pages/InstructorPage.jsx";
+import CreateCoursePage from "./pages/CreateCoursePage.jsx";
+import CourseBuilderPage from "./pages/CourseBuilderPage.jsx";
+import ModuleBuilderPage from "./pages/ModuleBuilderPage.jsx";
+import LessonBuilderPage from "./pages/LessonBuilderPage.jsx";
+import AssessmentBuilderPage from "./pages/AssessmentBuilderPage.jsx";
+import ResearchBuilderPage from "./pages/ResearchBuilderPage.jsx";
+import PortfolioBuilderPage from "./pages/PortfolioBuilderPage.jsx";
+import PublishCoursePage from "./pages/PublishCoursePage.jsx";
+import TestSupabase from "./pages/TestSupabase";
+import { Navigate } from "react-router-dom";
 export default function App() {
   return (
     <div className="flex min-h-screen flex-col">
@@ -41,15 +51,12 @@ export default function App() {
           <Route path="/projects" element={<Projects />} />
           <Route path="/lesson-engine" element={<LessonEnginePage />} />
           <Route path="/portfolio" element={<Portfolio />} />
+          <Route path="/instructor" element={<InstructorPage />} />
 
-          <Route
-            path="/dashboard"
-            element={
-              <ProtectedRoute>
-                <Dashboard />
-              </ProtectedRoute>
-            }
-          />
+         <Route
+  path="/dashboard"
+  element={<Navigate to="/instructor/courses" replace />}
+/>
 
           <Route
             path="/admin"
@@ -72,6 +79,51 @@ export default function App() {
         path="/mastery" 
         element={<MasteryPage />}
          />
+         <Route path="/instructor" element={<InstructorPage />} />
+
+<Route
+  path="/instructor/create-course"
+  element={<CreateCoursePage />}
+/>
+
+<Route
+  path="/instructor/courses"
+  element={<CourseBuilderPage />}
+/>
+
+<Route
+  path="/instructor/modules"
+  element={<ModuleBuilderPage />}
+/>
+
+<Route
+  path="/instructor/lessons"
+  element={<LessonBuilderPage />}
+/>
+
+<Route
+  path="/instructor/assessments"
+  element={<AssessmentBuilderPage />}
+/>
+
+<Route
+  path="/instructor/research"
+  element={<ResearchBuilderPage />}
+/>
+
+<Route
+  path="/instructor/portfolio"
+  element={<PortfolioBuilderPage />}
+/>
+
+<Route
+  path="/instructor/publish"
+  element={<PublishCoursePage />}
+/>
+<Route
+  path="/test-supabase"
+  element={<TestSupabase />}
+/>
         </Routes>
       </main>
 
