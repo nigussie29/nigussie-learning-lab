@@ -32,6 +32,9 @@ import PortfolioBuilderPage from "./pages/PortfolioBuilderPage.jsx";
 import PublishCoursePage from "./pages/PublishCoursePage.jsx";
 import TestSupabase from "./pages/TestSupabase";
 import { Navigate } from "react-router-dom";
+import LibraryHome from "./pages/library/LibraryHome.jsx";
+import Mathematics from "./pages/library/Mathematics.jsx";
+import HighSchoolMath from "./pages/library/HighSchoolMath.jsx";
 export default function App() {
   return (
     <div className="flex min-h-screen flex-col">
@@ -52,6 +55,7 @@ export default function App() {
           <Route path="/lesson-engine" element={<LessonEnginePage />} />
           <Route path="/portfolio" element={<Portfolio />} />
           <Route path="/instructor" element={<InstructorPage />} />
+          
 
          <Route
   path="/dashboard"
@@ -123,6 +127,18 @@ export default function App() {
 <Route
   path="/test-supabase"
   element={<TestSupabase />}
+/>
+<Route 
+path="/library" 
+element={<LibraryHome />} 
+/>
+<Route
+  path="/library/mathematics"
+  element={<Mathematics />}
+/>
+<Route
+  path="/library/mathematics/high-school"
+  element={<HighSchoolMath />}
 />
         </Routes>
       </main>
