@@ -4,6 +4,7 @@ import Portfolio from './pages/Portfolio.jsx';
 import Navbar from "./components/Navbar.jsx";
 import Footer from "./components/Footer.jsx";
 
+
 import Home from "./pages/Home.jsx";
 import About from "./pages/About.jsx";
 import Courses from "./pages/Courses.jsx";
@@ -35,6 +36,7 @@ import { Navigate } from "react-router-dom";
 import LibraryHome from "./pages/library/LibraryHome.jsx";
 import Mathematics from "./pages/library/Mathematics.jsx";
 import HighSchoolMath from "./pages/library/HighSchoolMath.jsx";
+import Lesson01Test from "./pages/library/college/Lesson01Test";
 export default function App() {
   return (
     <div className="flex min-h-screen flex-col">
@@ -140,7 +142,10 @@ element={<LibraryHome />}
   path="/library/mathematics/high-school"
   element={<HighSchoolMath />}
 />
-        </Routes>
+   <Route
+  path="/test/linear-algebra/lesson-01"
+  element={<Lesson01Test />}
+/>     </Routes>
       </main>
 
       <Footer />
