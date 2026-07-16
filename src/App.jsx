@@ -36,7 +36,9 @@ import { Navigate } from "react-router-dom";
 import LibraryHome from "./pages/library/LibraryHome.jsx";
 import Mathematics from "./pages/library/Mathematics.jsx";
 import HighSchoolMath from "./pages/library/HighSchoolMath.jsx";
-import Lesson01Test from "./pages/library/college/Lesson01Test";
+import LinearAlgebraLesson from "./pages/library/college/LinearAlgebraLesson";
+
+import LinearAlgebraLessonsTest from "./pages/library/college/LinearAlgebraLessonsTest";
 export default function App() {
   return (
     <div className="flex min-h-screen flex-col">
@@ -142,10 +144,16 @@ element={<LibraryHome />}
   path="/library/mathematics/high-school"
   element={<HighSchoolMath />}
 />
-   <Route
-  path="/test/linear-algebra/lesson-01"
-  element={<Lesson01Test />}
-/>     </Routes>
+     
+<Route
+  path="/test/linear-algebra-lessons"
+  element={<LinearAlgebraLessonsTest />}
+/>
+<Route
+  path="/library/college/linear-algebra/module/:moduleNumber/lesson/:lessonSlug"
+  element={<LinearAlgebraLesson />}
+/>
+   </Routes>
       </main>
 
       <Footer />
