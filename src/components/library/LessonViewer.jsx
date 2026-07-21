@@ -1,4 +1,8 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import {
+  isLessonCompleted,
+  toggleLessonCompletion,
+} from "../../services/linearAlgebraProgress.js";
 
 export default function LessonViewer({
   lesson,
@@ -9,24 +13,31 @@ export default function LessonViewer({
   const [showAnswers, setShowAnswers] = useState(false);
   const [completed, setCompleted] = useState(false);
 
-  if (!lesson) {
-    return (
-      <main className="min-h-screen bg-slate-50 px-5 py-12">
-        <div className="mx-auto max-w-5xl rounded-3xl border border-red-200 bg-red-50 p-8">
-          <p className="text-sm font-bold uppercase tracking-wider text-red-600">
-            Lesson error
-          </p>
+  useEffect(() => {
+    if (!lesson?.moduleNumber || !lesson?.slug) {
+      setCompleted(false);
+      return;
+    }
 
-          <h1 className="mt-2 text-3xl font-extrabold text-red-900">
-            Lesson not found
-          </h1>
-
-          <p className="mt-3 text-red-700">
-            The requested lesson could not be loaded.
-          </p>
-        </div>
-      </main>
+    setCompleted(
+      isLessonCompleted(
+        lesson.moduleNumber,
+        lesson.slug
+      )
     );
+  }, [lesson]);
+
+  if (!lesson) {
+    return <LessonNotFound />;
+  }
+
+  function handleToggleComplete() {
+    const result = toggleLessonCompletion(
+      lesson.moduleNumber,
+      lesson.slug
+    );
+
+    setCompleted(result.completed);
   }
 
   const {
@@ -101,7 +112,10 @@ export default function LessonViewer({
           {problemFirst && (
             <SectionCard
               eyebrow="Problem-first learning"
-              title={problemFirst.title || "Opening Investigation"}
+              title={
+                problemFirst.title ||
+                "Opening Investigation"
+              }
             >
               {problemFirst.scenario && (
                 <p className="leading-8 text-slate-700">
@@ -112,9 +126,13 @@ export default function LessonViewer({
               {Array.isArray(problemFirst.questions) &&
                 problemFirst.questions.length > 0 && (
                   <div className="mt-6">
-                    <Subheading>Investigation Questions</Subheading>
+                    <Subheading>
+                      Investigation Questions
+                    </Subheading>
 
-                    <NumberedList items={problemFirst.questions} />
+                    <NumberedList
+                      items={problemFirst.questions}
+                    />
                   </div>
                 )}
 
@@ -203,7 +221,8 @@ export default function LessonViewer({
 
                     {formula.requirement && (
                       <p className="mt-2 text-sm font-semibold text-blue-700">
-                        Requirement: {formula.requirement}
+                        Requirement:{" "}
+                        {formula.requirement}
                       </p>
                     )}
                   </article>
@@ -218,13 +237,15 @@ export default function LessonViewer({
               title="Worked Examples"
             >
               <div className="space-y-6">
-                {workedExamples.map((example, index) => (
-                  <WorkedExample
-                    key={example.id || index}
-                    example={example}
-                    number={index + 1}
-                  />
-                ))}
+                {workedExamples.map(
+                  (example, index) => (
+                    <WorkedExample
+                      key={example.id || index}
+                      example={example}
+                      number={index + 1}
+                    />
+                  )
+                )}
               </div>
             </SectionCard>
           )}
@@ -235,20 +256,22 @@ export default function LessonViewer({
               title="Real-World Applications"
             >
               <div className="grid gap-4 md:grid-cols-2">
-                {realWorldApplications.map((item, index) => (
-                  <article
-                    key={`${item.field}-${index}`}
-                    className="rounded-2xl border border-slate-200 p-5"
-                  >
-                    <p className="text-sm font-bold uppercase tracking-wide text-blue-600">
-                      {item.field}
-                    </p>
+                {realWorldApplications.map(
+                  (item, index) => (
+                    <article
+                      key={`${item.field}-${index}`}
+                      className="rounded-2xl border border-slate-200 p-5"
+                    >
+                      <p className="text-sm font-bold uppercase tracking-wide text-blue-600">
+                        {item.field}
+                      </p>
 
-                    <p className="mt-2 leading-7 text-slate-700">
-                      {item.application}
-                    </p>
-                  </article>
-                ))}
+                      <p className="mt-2 leading-7 text-slate-700">
+                        {item.application}
+                      </p>
+                    </article>
+                  )
+                )}
               </div>
             </SectionCard>
           )}
@@ -256,7 +279,10 @@ export default function LessonViewer({
           {aiConnection && (
             <SectionCard
               eyebrow="AI connection"
-              title={aiConnection.title || "Connection to AI"}
+              title={
+                aiConnection.title ||
+                "Connection to AI"
+              }
             >
               {aiConnection.explanation && (
                 <p className="leading-8 text-slate-700">
@@ -274,7 +300,9 @@ export default function LessonViewer({
                 aiConnection.examples.length > 0 && (
                   <div className="mt-6">
                     <Subheading>Examples</Subheading>
-                    <CheckList items={aiConnection.examples} />
+                    <CheckList
+                      items={aiConnection.examples}
+                    />
                   </div>
                 )}
 
@@ -282,7 +310,9 @@ export default function LessonViewer({
                 aiConnection.uses.length > 0 && (
                   <div className="mt-6">
                     <Subheading>Uses</Subheading>
-                    <TagList items={aiConnection.uses} />
+                    <TagList
+                      items={aiConnection.uses}
+                    />
                   </div>
                 )}
 
@@ -300,7 +330,9 @@ export default function LessonViewer({
             </SectionCard>
           )}
 
-          {pythonLab && <PythonLab lab={pythonLab} />}
+          {pythonLab && (
+            <PythonLab lab={pythonLab} />
+          )}
 
           {guidedPractice.length > 0 && (
             <PracticeSection
@@ -321,14 +353,21 @@ export default function LessonViewer({
           )}
 
           {(guidedPractice.length > 0 ||
-            independentPractice.length > 0) && (
+            independentPractice.length > 0 ||
+            formativeAssessment) && (
             <div className="flex justify-end">
               <button
                 type="button"
-                onClick={() => setShowAnswers((current) => !current)}
+                onClick={() =>
+                  setShowAnswers(
+                    (current) => !current
+                  )
+                }
                 className="rounded-xl bg-slate-900 px-5 py-3 font-bold text-white transition hover:bg-slate-700"
               >
-                {showAnswers ? "Hide Answers" : "Show Answers"}
+                {showAnswers
+                  ? "Hide Answers"
+                  : "Show Answers"}
               </button>
             </div>
           )}
@@ -339,20 +378,23 @@ export default function LessonViewer({
               title="Common Mistakes"
             >
               <div className="space-y-4">
-                {commonMistakes.map((item, index) => (
-                  <article
-                    key={index}
-                    className="rounded-2xl border border-red-200 bg-red-50 p-5"
-                  >
-                    <p className="font-extrabold text-red-900">
-                      Mistake: {item.mistake}
-                    </p>
+                {commonMistakes.map(
+                  (item, index) => (
+                    <article
+                      key={index}
+                      className="rounded-2xl border border-red-200 bg-red-50 p-5"
+                    >
+                      <p className="font-extrabold text-red-900">
+                        Mistake: {item.mistake}
+                      </p>
 
-                    <p className="mt-2 leading-7 text-red-800">
-                      Correction: {item.correction}
-                    </p>
-                  </article>
-                ))}
+                      <p className="mt-2 leading-7 text-red-800">
+                        Correction:{" "}
+                        {item.correction}
+                      </p>
+                    </article>
+                  )
+                )}
               </div>
             </SectionCard>
           )}
@@ -367,7 +409,10 @@ export default function LessonViewer({
           {portfolioArtifact && (
             <SectionCard
               eyebrow="Portfolio evidence"
-              title={portfolioArtifact.title || "Portfolio Artifact"}
+              title={
+                portfolioArtifact.title ||
+                "Portfolio Artifact"
+              }
             >
               {portfolioArtifact.description && (
                 <p className="leading-8 text-slate-700">
@@ -375,22 +420,38 @@ export default function LessonViewer({
                 </p>
               )}
 
-              {Array.isArray(portfolioArtifact.requiredSections) &&
-                portfolioArtifact.requiredSections.length > 0 && (
+              {Array.isArray(
+                portfolioArtifact.requiredSections
+              ) &&
+                portfolioArtifact.requiredSections
+                  .length > 0 && (
                   <div className="mt-6">
-                    <Subheading>Required Sections</Subheading>
+                    <Subheading>
+                      Required Sections
+                    </Subheading>
+
                     <CheckList
-                      items={portfolioArtifact.requiredSections}
+                      items={
+                        portfolioArtifact.requiredSections
+                      }
                     />
                   </div>
                 )}
 
-              {Array.isArray(portfolioArtifact.requiredEvidence) &&
-                portfolioArtifact.requiredEvidence.length > 0 && (
+              {Array.isArray(
+                portfolioArtifact.requiredEvidence
+              ) &&
+                portfolioArtifact.requiredEvidence
+                  .length > 0 && (
                   <div className="mt-6">
-                    <Subheading>Required Evidence</Subheading>
+                    <Subheading>
+                      Required Evidence
+                    </Subheading>
+
                     <CheckList
-                      items={portfolioArtifact.requiredEvidence}
+                      items={
+                        portfolioArtifact.requiredEvidence
+                      }
                     />
                   </div>
                 )}
@@ -446,8 +507,28 @@ export default function LessonViewer({
         <LessonSidebar
           lesson={lesson}
           completed={completed}
-          onComplete={() => setCompleted((current) => !current)}
+          onComplete={handleToggleComplete}
         />
+      </div>
+    </main>
+  );
+}
+
+function LessonNotFound() {
+  return (
+    <main className="min-h-screen bg-slate-50 px-5 py-12">
+      <div className="mx-auto max-w-5xl rounded-3xl border border-red-200 bg-red-50 p-8">
+        <p className="text-sm font-bold uppercase tracking-wider text-red-600">
+          Lesson error
+        </p>
+
+        <h1 className="mt-2 text-3xl font-extrabold text-red-900">
+          Lesson not found
+        </h1>
+
+        <p className="mt-3 text-red-700">
+          The requested lesson could not be loaded.
+        </p>
       </div>
     </main>
   );
@@ -477,7 +558,8 @@ function LessonHero({
 
         <div className="mt-8 max-w-4xl">
           <p className="text-sm font-bold uppercase tracking-[0.25em] text-blue-300">
-            Module {moduleNumber} · Lesson {lessonNumber}
+            Module {moduleNumber} · Lesson{" "}
+            {lessonNumber}
           </p>
 
           <h1 className="mt-4 text-4xl font-black leading-tight md:text-6xl">
@@ -491,10 +573,21 @@ function LessonHero({
           )}
 
           <div className="mt-8 flex flex-wrap gap-3">
-            {duration && <HeroBadge>{duration}</HeroBadge>}
-            {level && <HeroBadge>{level}</HeroBadge>}
-            {status && <HeroBadge>{status}</HeroBadge>}
-            {completed && <HeroBadge>Completed</HeroBadge>}
+            {duration && (
+              <HeroBadge>{duration}</HeroBadge>
+            )}
+
+            {level && (
+              <HeroBadge>{level}</HeroBadge>
+            )}
+
+            {status && (
+              <HeroBadge>{status}</HeroBadge>
+            )}
+
+            {completed && (
+              <HeroBadge>Completed ✓</HeroBadge>
+            )}
           </div>
         </div>
       </div>
@@ -502,16 +595,26 @@ function LessonHero({
   );
 }
 
-function LessonSidebar({ lesson, completed, onComplete }) {
+function LessonSidebar({
+  lesson,
+  completed,
+  onComplete,
+}) {
   const sections = [
-    lesson.learningObjectives?.length > 0 && "Objectives",
-    lesson.vocabulary?.length > 0 && "Vocabulary",
+    lesson.learningObjectives?.length > 0 &&
+      "Objectives",
+    lesson.vocabulary?.length > 0 &&
+      "Vocabulary",
     lesson.formulas?.length > 0 && "Formulas",
-    lesson.workedExamples?.length > 0 && "Worked Examples",
+    lesson.workedExamples?.length > 0 &&
+      "Worked Examples",
     lesson.pythonLab && "Python Lab",
-    lesson.guidedPractice?.length > 0 && "Guided Practice",
-    lesson.independentPractice?.length > 0 && "Independent Practice",
-    lesson.formativeAssessment && "Assessment",
+    lesson.guidedPractice?.length > 0 &&
+      "Guided Practice",
+    lesson.independentPractice?.length > 0 &&
+      "Independent Practice",
+    lesson.formativeAssessment &&
+      "Assessment",
     lesson.summary?.length > 0 && "Summary",
   ].filter(Boolean);
 
@@ -524,14 +627,18 @@ function LessonSidebar({ lesson, completed, onComplete }) {
 
         <div className="mt-4 h-3 overflow-hidden rounded-full bg-slate-200">
           <div
-            className={`h-full rounded-full transition-all ${
-              completed ? "w-full bg-emerald-500" : "w-1/4 bg-blue-600"
+            className={`h-full rounded-full transition-all duration-300 ${
+              completed
+                ? "w-full bg-emerald-500"
+                : "w-1/4 bg-blue-600"
             }`}
           />
         </div>
 
         <p className="mt-3 font-bold text-slate-900">
-          {completed ? "Lesson completed" : "Lesson in progress"}
+          {completed
+            ? "Lesson completed"
+            : "Lesson in progress"}
         </p>
 
         <button
@@ -543,8 +650,15 @@ function LessonSidebar({ lesson, completed, onComplete }) {
               : "bg-blue-600 text-white hover:bg-blue-700"
           }`}
         >
-          {completed ? "Mark Incomplete" : "Mark Complete"}
+          {completed
+            ? "Mark Incomplete"
+            : "Mark Complete"}
         </button>
+
+        <p className="mt-3 text-center text-xs leading-5 text-slate-500">
+          Your progress is saved automatically on
+          this device.
+        </p>
       </div>
 
       <div className="rounded-3xl border border-slate-200 bg-white p-6 shadow-sm">
@@ -568,7 +682,11 @@ function LessonSidebar({ lesson, completed, onComplete }) {
   );
 }
 
-function SectionCard({ eyebrow, title, children }) {
+function SectionCard({
+  eyebrow,
+  title,
+  children,
+}) {
   return (
     <section className="rounded-3xl border border-slate-200 bg-white p-6 shadow-sm md:p-8">
       {eyebrow && (
@@ -586,7 +704,11 @@ function SectionCard({ eyebrow, title, children }) {
   );
 }
 
-function InfoPanel({ label, text, className = "" }) {
+function InfoPanel({
+  label,
+  text,
+  className = "",
+}) {
   return (
     <div
       className={`rounded-2xl border border-slate-200 bg-slate-50 p-5 ${className}`}
@@ -596,7 +718,7 @@ function InfoPanel({ label, text, className = "" }) {
       </p>
 
       <p className="mt-2 text-lg font-semibold leading-8 text-slate-900">
-        {text}
+        {formatValue(text)}
       </p>
     </div>
   );
@@ -619,8 +741,9 @@ function WorkedExample({ example, number }) {
         {example.problem && (
           <div>
             <Subheading>Problem</Subheading>
+
             <p className="leading-7 text-slate-700">
-              {example.problem}
+              {formatValue(example.problem)}
             </p>
           </div>
         )}
@@ -628,8 +751,13 @@ function WorkedExample({ example, number }) {
         {Array.isArray(example.solutionSteps) &&
           example.solutionSteps.length > 0 && (
             <div>
-              <Subheading>Solution Steps</Subheading>
-              <NumberedList items={example.solutionSteps} />
+              <Subheading>
+                Solution Steps
+              </Subheading>
+
+              <NumberedList
+                items={example.solutionSteps}
+              />
             </div>
           )}
 
@@ -647,9 +775,14 @@ function WorkedExample({ example, number }) {
 
         {example.interpretation && (
           <div>
-            <Subheading>Interpretation</Subheading>
+            <Subheading>
+              Interpretation
+            </Subheading>
+
             <p className="leading-7 text-slate-700">
-              {example.interpretation}
+              {formatValue(
+                example.interpretation
+              )}
             </p>
           </div>
         )}
@@ -676,12 +809,15 @@ function PythonLab({ lab }) {
         </pre>
       )}
 
-      {Array.isArray(lab.questions) && lab.questions.length > 0 && (
-        <div className="mt-6">
-          <Subheading>Lab Questions</Subheading>
-          <NumberedList items={lab.questions} />
-        </div>
-      )}
+      {Array.isArray(lab.questions) &&
+        lab.questions.length > 0 && (
+          <div className="mt-6">
+            <Subheading>Lab Questions</Subheading>
+            <NumberedList
+              items={lab.questions}
+            />
+          </div>
+        )}
 
       {lab.extension && (
         <div className="mt-6 rounded-2xl border border-purple-200 bg-purple-50 p-5">
@@ -705,7 +841,10 @@ function PracticeSection({
   showAnswers,
 }) {
   return (
-    <SectionCard eyebrow={eyebrow} title={title}>
+    <SectionCard
+      eyebrow={eyebrow}
+      title={title}
+    >
       <div className="space-y-4">
         {items.map((item, index) => (
           <article
@@ -725,23 +864,21 @@ function PracticeSection({
             </div>
 
             <p className="mt-3 leading-7 text-slate-700">
-              {item.question || item.prompt}
+              {formatValue(
+                item.question || item.prompt
+              )}
             </p>
 
             {showAnswers &&
               (item.answer !== undefined ||
-                item.sampleAnswer !== undefined) && (
-                <div className="mt-4 rounded-xl bg-emerald-50 p-4">
-                  <p className="text-sm font-bold uppercase tracking-wide text-emerald-700">
-                    Answer
-                  </p>
-
-                  <pre className="mt-2 whitespace-pre-wrap font-sans leading-7 text-emerald-950">
-                    {formatValue(
-                      item.answer ?? item.sampleAnswer
-                    )}
-                  </pre>
-                </div>
+                item.sampleAnswer !==
+                  undefined) && (
+                <AnswerPanel
+                  value={
+                    item.answer ??
+                    item.sampleAnswer
+                  }
+                />
               )}
           </article>
         ))}
@@ -750,8 +887,12 @@ function PracticeSection({
   );
 }
 
-function AssessmentSection({ assessment, showAnswers }) {
-  const questions = assessment.questions || [];
+function AssessmentSection({
+  assessment,
+  showAnswers,
+}) {
+  const questions =
+    assessment.questions || [];
 
   return (
     <SectionCard
@@ -759,12 +900,19 @@ function AssessmentSection({ assessment, showAnswers }) {
       title="Formative Assessment"
     >
       <div className="flex flex-wrap gap-3">
-        {assessment.totalPoints !== undefined && (
-          <Tag>Points: {assessment.totalPoints}</Tag>
+        {assessment.totalPoints !==
+          undefined && (
+          <Tag>
+            Points: {assessment.totalPoints}
+          </Tag>
         )}
 
-        {assessment.passingScore !== undefined && (
-          <Tag>Passing: {assessment.passingScore}</Tag>
+        {assessment.passingScore !==
+          undefined && (
+          <Tag>
+            Passing:{" "}
+            {assessment.passingScore}
+          </Tag>
         )}
       </div>
 
@@ -776,10 +924,12 @@ function AssessmentSection({ assessment, showAnswers }) {
           >
             <div className="flex flex-wrap items-center justify-between gap-3">
               <p className="font-extrabold text-slate-900">
-                Assessment Question {index + 1}
+                Assessment Question{" "}
+                {index + 1}
               </p>
 
-              {question.points !== undefined && (
+              {question.points !==
+                undefined && (
                 <span className="rounded-full bg-blue-100 px-3 py-1 text-sm font-bold text-blue-700">
                   {question.points} points
                 </span>
@@ -787,42 +937,58 @@ function AssessmentSection({ assessment, showAnswers }) {
             </div>
 
             <p className="mt-3 leading-7 text-slate-700">
-              {question.prompt}
+              {formatValue(question.prompt)}
             </p>
 
-            {Array.isArray(question.options) &&
+            {Array.isArray(
+              question.options
+            ) &&
               question.options.length > 0 && (
                 <div className="mt-4 space-y-2">
-                  {question.options.map((option) => (
-                    <div
-                      key={option}
-                      className="rounded-xl bg-slate-50 px-4 py-3 text-slate-700"
-                    >
-                      {option}
-                    </div>
-                  ))}
+                  {question.options.map(
+                    (option, optionIndex) => (
+                      <div
+                        key={`${formatValue(
+                          option
+                        )}-${optionIndex}`}
+                        className="rounded-xl bg-slate-50 px-4 py-3 text-slate-700"
+                      >
+                        {formatValue(option)}
+                      </div>
+                    )
+                  )}
                 </div>
               )}
 
             {showAnswers &&
               (question.answer !== undefined ||
-                question.sampleAnswer !== undefined) && (
-                <div className="mt-4 rounded-xl bg-emerald-50 p-4">
-                  <p className="text-sm font-bold uppercase tracking-wide text-emerald-700">
-                    Answer
-                  </p>
-
-                  <pre className="mt-2 whitespace-pre-wrap font-sans leading-7 text-emerald-950">
-                    {formatValue(
-                      question.answer ?? question.sampleAnswer
-                    )}
-                  </pre>
-                </div>
+                question.sampleAnswer !==
+                  undefined) && (
+                <AnswerPanel
+                  value={
+                    question.answer ??
+                    question.sampleAnswer
+                  }
+                />
               )}
           </article>
         ))}
       </div>
     </SectionCard>
+  );
+}
+
+function AnswerPanel({ value }) {
+  return (
+    <div className="mt-4 rounded-xl bg-emerald-50 p-4">
+      <p className="text-sm font-bold uppercase tracking-wide text-emerald-700">
+        Answer
+      </p>
+
+      <pre className="mt-2 whitespace-pre-wrap font-sans leading-7 text-emerald-950">
+        {formatValue(value)}
+      </pre>
+    </div>
   );
 }
 
@@ -845,7 +1011,8 @@ function LessonNavigation({
         </p>
 
         <p className="mt-2 font-extrabold text-slate-900">
-          {previousLesson?.title || "No previous lesson"}
+          {previousLesson?.title ||
+            "No previous lesson"}
         </p>
       </button>
 
@@ -860,7 +1027,8 @@ function LessonNavigation({
         </p>
 
         <p className="mt-2 font-extrabold text-slate-900">
-          {nextLesson?.title || "No next lesson"}
+          {nextLesson?.title ||
+            "No next lesson"}
         </p>
       </button>
     </nav>
@@ -909,7 +1077,9 @@ function TagList({ items }) {
   return (
     <div className="flex flex-wrap gap-3">
       {items.map((item, index) => (
-        <Tag key={`${formatValue(item)}-${index}`}>
+        <Tag
+          key={`${formatValue(item)}-${index}`}
+        >
           {formatValue(item)}
         </Tag>
       ))}
@@ -942,11 +1112,18 @@ function Subheading({ children }) {
 }
 
 function formatValue(value) {
-  if (value === undefined || value === null) {
+  if (
+    value === undefined ||
+    value === null
+  ) {
     return "";
   }
 
-  if (typeof value === "string" || typeof value === "number") {
+  if (
+    typeof value === "string" ||
+    typeof value === "number" ||
+    typeof value === "boolean"
+  ) {
     return String(value);
   }
 

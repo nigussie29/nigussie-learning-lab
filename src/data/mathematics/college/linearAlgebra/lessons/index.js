@@ -1,9 +1,11 @@
 import module01Lessons from "./module01/index.js";
 import module02Lessons from "./module02/index.js";
+import module03Lessons from "./module03/index.js";
 
 const linearAlgebraLessons = [
   ...module01Lessons,
   ...module02Lessons,
+  ...module03Lessons,
 ];
 
 export function getLinearAlgebraLessonById(id) {

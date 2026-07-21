@@ -1,8 +1,8 @@
-export default function PracticeSection({ practice }) {
+export default function PracticeSection({ practice = [] }) {
   return (
     <section className="mt-8 rounded-3xl bg-white p-8 shadow-sm">
       <div className="flex items-center gap-3">
-        <span className="text-4xl">📝</span>
+        <span className="text-4xl">✍️</span>
 
         <div>
           <h2 className="text-3xl font-extrabold text-slate-900">
@@ -10,22 +10,36 @@ export default function PracticeSection({ practice }) {
           </h2>
 
           <p className="text-slate-500">
-            Work through guided steps
+            Strengthen your understanding
           </p>
         </div>
       </div>
 
-      <div className="mt-8 space-y-4">
+      <div className="mt-8 space-y-6">
         {practice.map((item, index) => (
           <div
-            key={item}
-            className="flex items-center gap-4 rounded-2xl bg-slate-50 p-5"
+            key={index}
+            className="rounded-2xl bg-blue-50 p-6"
           >
-            <div className="flex h-10 w-10 items-center justify-center rounded-full bg-blue-600 font-bold text-white">
-              {index + 1}
-            </div>
+            <h3 className="font-bold text-slate-900">
+              Question {index + 1}
+            </h3>
 
-            <p className="font-medium text-slate-700">{item}</p>
+            <p className="mt-2 text-slate-700">
+              {item.question || item.prompt || item}
+            </p>
+
+            {item.answer && (
+              <details className="mt-4">
+                <summary className="cursor-pointer font-semibold text-blue-600">
+                  Show Answer
+                </summary>
+
+                <p className="mt-3 text-slate-700">
+                  {item.answer}
+                </p>
+              </details>
+            )}
           </div>
         ))}
       </div>

@@ -14,42 +14,92 @@ import ApplySection from "./ApplySection";
 import NextLesson from "./NextLesson";
 
 export default function LessonTemplate({ lesson }) {
+  if (!lesson) {
+    return (
+      <main className="min-h-screen bg-slate-50 px-6 py-10">
+        <div className="mx-auto max-w-7xl">
+          <section className="rounded-3xl bg-white p-8 shadow-sm">
+            <h1 className="text-3xl font-extrabold text-slate-900">
+              Lesson unavailable
+            </h1>
+
+            <p className="mt-3 text-slate-600">
+              The requested lesson could not be loaded.
+            </p>
+          </section>
+        </div>
+      </main>
+    );
+  }
+
   return (
     <main className="min-h-screen bg-slate-50 px-6 py-10">
       <div className="mx-auto max-w-7xl">
         <LessonHero lesson={lesson} />
 
-        <LearningObjectives objectives={lesson.objectives} />
+        {lesson.objectives?.length > 0 && (
+          <LearningObjectives objectives={lesson.objectives} />
+        )}
 
-        <WhyItMatters text={lesson.whyItMatters} />
+        {lesson.whyItMatters && (
+          <WhyItMatters text={lesson.whyItMatters} />
+        )}
 
-        <LearnSection learn={lesson.learn} />
+        {lesson.learn && (
+          <LearnSection learn={lesson.learn} />
+        )}
 
-        <PracticeSection practice={lesson.practice} />
+        {lesson.practice?.length > 0 && (
+          <PracticeSection practice={lesson.practice} />
+        )}
 
-        <BuildSection build={lesson.build} />
+        {lesson.build && (
+          <BuildSection build={lesson.build} />
+        )}
 
-        <MasterSection master={lesson.master} />
+        {lesson.master && (
+          <MasterSection master={lesson.master} />
+        )}
 
-        <LumineryCoach
-          message={lesson.luminery.message}
-          recommendation={lesson.luminery.recommendation}
-          confidence={lesson.luminery.confidence}
-        />
+        {lesson.luminery && (
+          <LumineryCoach
+            message={lesson.luminery.message}
+            recommendation={lesson.luminery.recommendation}
+            confidence={lesson.luminery.confidence}
+          />
+        )}
 
-        <PortfolioEvidence evidence={lesson.portfolioEvidence} />
+        {lesson.portfolioEvidence && (
+          <PortfolioEvidence
+            evidence={lesson.portfolioEvidence}
+          />
+        )}
 
-        <CareerConnection careers={lesson.careerConnection} />
+        {lesson.careerConnection && (
+          <CareerConnection
+            careers={lesson.careerConnection}
+          />
+        )}
 
-        <ResearchExtension research={lesson.researchExtension} />
+        {lesson.researchExtension && (
+          <ResearchExtension
+            research={lesson.researchExtension}
+          />
+        )}
 
-        <AppliedMathematicsConnection
-          math={lesson.appliedMathematics}
-        />
+        {lesson.appliedMathematics && (
+          <AppliedMathematicsConnection
+            math={lesson.appliedMathematics}
+          />
+        )}
 
-        <ApplySection apply={lesson.apply} />
+        {lesson.apply && (
+          <ApplySection apply={lesson.apply} />
+        )}
 
-        <NextLesson lesson={lesson.nextLesson} />
+        {lesson.nextLesson && (
+          <NextLesson lesson={lesson.nextLesson.title} />
+        )}
       </div>
     </main>
   );

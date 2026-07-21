@@ -1,5 +1,6 @@
 import { useNavigate, useParams } from "react-router-dom";
 import LessonViewer from "../../../components/library/LessonViewer";
+import Breadcrumbs from "../../../components/navigation/Breadcrumbs";
 import {
   getLinearAlgebraLessonBySlug,
   getLinearAlgebraLessonsByModule,
@@ -77,18 +78,38 @@ export default function LinearAlgebraLesson() {
     );
   }
 
-  return (
+return (
+  <>
+    <Breadcrumbs
+      items={[
+        { label: "Home", to: "/" },
+        { label: "Knowledge Library", to: "/library" },
+        { label: "College Mathematics", to: "/library/college" },
+        {
+          label: "Linear Algebra",
+          to: "/library/college/linear-algebra",
+        },
+        {
+          label: `Module ${moduleNumber}`,
+          to: `/library/college/linear-algebra/module/${moduleNumber}`,
+        },
+        {
+          label: `Lesson ${lesson.lessonNumber}: ${lesson.title}`,
+        },
+      ]}
+    />
+
     <LessonViewer
       lesson={{
         ...lesson,
         previousLesson:
           lesson.previousLesson || previousLesson,
-        nextLesson:
-          lesson.nextLesson || nextLesson,
+        nextLesson: lesson.nextLesson || nextLesson,
       }}
       onPrevious={handlePrevious}
       onNext={handleNext}
       onBackToModule={handleBackToModule}
     />
-  );
+  </>
+);
 }

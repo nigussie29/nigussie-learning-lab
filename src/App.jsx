@@ -4,7 +4,7 @@ import Portfolio from './pages/Portfolio.jsx';
 import Navbar from "./components/Navbar.jsx";
 import Footer from "./components/Footer.jsx";
 
-
+import LinearAlgebraModule from "./pages/library/college/LinearAlgebraModule";
 import Home from "./pages/Home.jsx";
 import About from "./pages/About.jsx";
 import Courses from "./pages/Courses.jsx";
@@ -35,16 +35,21 @@ import TestSupabase from "./pages/TestSupabase";
 import { Navigate } from "react-router-dom";
 import LibraryHome from "./pages/library/LibraryHome.jsx";
 import Mathematics from "./pages/library/Mathematics.jsx";
-import HighSchoolMath from "./pages/library/HighSchoolMath.jsx";
 import LinearAlgebraLesson from "./pages/library/college/LinearAlgebraLesson";
-
+import LinearAlgebra from "./pages/library/college/LinearAlgebra";
 import LinearAlgebraLessonsTest from "./pages/library/college/LinearAlgebraLessonsTest";
+import MainNavbar from "./components/navigation/MainNavbar";
+import HighSchoolMathematics from "./pages/library/highschool/HighSchoolMathematics";
+import AlgebraOne from "./pages/library/highschool/AlgebraOne";
+import AlgebraOneModule from "./pages/library/highschool/AlgebraOneModule.jsx";
+import AlgebraOneLesson from "./pages/library/highschool/AlgebraOneLesson.jsx";
 export default function App() {
   return (
     <div className="flex min-h-screen flex-col">
       <Navbar />
 
       <main className="flex-1">
+          
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/about" element={<About />} />
@@ -60,7 +65,10 @@ export default function App() {
           <Route path="/portfolio" element={<Portfolio />} />
           <Route path="/instructor" element={<InstructorPage />} />
           
-
+<Route
+  path="/library/college/linear-algebra/module/:moduleNumber"
+  element={<LinearAlgebraModule />}
+/>
          <Route
   path="/dashboard"
   element={<Navigate to="/instructor/courses" replace />}
@@ -87,7 +95,7 @@ export default function App() {
         path="/mastery" 
         element={<MasteryPage />}
          />
-         <Route path="/instructor" element={<InstructorPage />} />
+         
 
 <Route
   path="/instructor/create-course"
@@ -118,6 +126,10 @@ export default function App() {
   path="/instructor/research"
   element={<ResearchBuilderPage />}
 />
+<Route
+  path="/library/college/linear-algebra"
+  element={<LinearAlgebra />}
+/>
 
 <Route
   path="/instructor/portfolio"
@@ -140,11 +152,7 @@ element={<LibraryHome />}
   path="/library/mathematics"
   element={<Mathematics />}
 />
-<Route
-  path="/library/mathematics/high-school"
-  element={<HighSchoolMath />}
-/>
-     
+  
 <Route
   path="/test/linear-algebra-lessons"
   element={<LinearAlgebraLessonsTest />}
@@ -152,6 +160,25 @@ element={<LibraryHome />}
 <Route
   path="/library/college/linear-algebra/module/:moduleNumber/lesson/:lessonSlug"
   element={<LinearAlgebraLesson />}
+/>
+<Route
+  path="/library/high-school"
+  element={<HighSchoolMathematics />}
+/>
+
+<Route
+  path="/library/high-school/algebra-1"
+  element={<AlgebraOne />}
+/>
+
+<Route
+  path="/library/high-school/algebra-1/module/:moduleNumber"
+  element={<AlgebraOneModule />}
+/>
+
+<Route
+  path="/library/high-school/algebra-1/module/:moduleNumber/lesson/:lessonSlug"
+  element={<AlgebraOneLesson />}
 />
    </Routes>
       </main>

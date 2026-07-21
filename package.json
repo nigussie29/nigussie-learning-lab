@@ -1,6 +1,7 @@
 {
   "name": "teach-platform-mvp",
   "version": "1.0.0",
+  "type": "module",
   "private": true,
   "description": "Online teaching platform MVP using React, Tailwind CSS, Supabase, and Vercel.",
   "scripts": {
