@@ -1,37 +1,65 @@
-export default function LearnSection({ learn }) {
+import VideoPlayer from "../VideoPlayer";
+
+export default function LearnSection({ learn, lessonTitle }) {
+  if (!learn) {
+    return null;
+  }
+
   return (
-    <section className="mt-8 rounded-3xl bg-white p-8 shadow-sm">
-      <div className="flex items-center gap-3">
-        <span className="text-4xl">📘</span>
+    <section className="rounded-3xl bg-white p-8 shadow-sm">
+      <h2 className="text-2xl font-extrabold text-slate-900">
+        {learn.title || "Learn"}
+      </h2>
 
-        <div>
-          <h2 className="text-3xl font-extrabold text-slate-900">
-            Learn
-          </h2>
+      {learn.introduction && (
+        <p className="mt-5 leading-8 text-slate-700">
+          {learn.introduction}
+        </p>
+      )}
 
-          <p className="text-slate-500">
-            Understand the concept
+      {learn.video?.url && (
+        <div className="mt-6">
+          <VideoPlayer
+            src={learn.video.url}
+            title={learn.video.title || lessonTitle || "Lesson"}
+          />
+        </div>
+      )}
+
+      {learn.notes && (
+        <div className="mt-6 rounded-2xl bg-slate-50 p-6">
+          <h3 className="text-lg font-bold text-slate-900">
+            Lesson Notes
+          </h3>
+
+          <p className="mt-3 whitespace-pre-line leading-8 text-slate-700">
+            {learn.notes}
           </p>
         </div>
-      </div>
+      )}
 
-      <h3 className="mt-8 text-2xl font-bold text-slate-900">
-        {learn.title}
-      </h3>
+      {learn.sections?.length > 0 && (
+        <div className="mt-6 space-y-5">
+          {learn.sections.map((section, index) => (
+            <article
+              key={section.id || section.title || index}
+              className="rounded-2xl border border-slate-200 p-6"
+            >
+              {section.title && (
+                <h3 className="text-xl font-bold text-slate-900">
+                  {section.title}
+                </h3>
+              )}
 
-      <p className="mt-4 text-lg leading-8 text-slate-700">
-        {learn.content}
-      </p>
-
-      <div className="mt-6 rounded-2xl bg-blue-50 p-5">
-        <p className="text-sm font-bold uppercase tracking-wide text-blue-600">
-          Formula
-        </p>
-
-        <p className="mt-2 text-xl font-extrabold text-slate-900">
-          {learn.formula}
-        </p>
-      </div>
+              {section.content && (
+                <p className="mt-3 whitespace-pre-line leading-8 text-slate-700">
+                  {section.content}
+                </p>
+              )}
+            </article>
+          ))}
+        </div>
+      )}
     </section>
   );
 }

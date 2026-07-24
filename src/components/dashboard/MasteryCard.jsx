@@ -1,4 +1,4 @@
-import MasteryEngine from "../mastery/MasteryEngine";
+import MasteryEngine from "../mastery/MasteryPanel";
 
 export default function MasteryCard({ mastery }) {
   return (

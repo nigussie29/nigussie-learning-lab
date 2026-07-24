@@ -55,7 +55,7 @@ export default function App() {
           <Route path="/about" element={<About />} />
           <Route path="/courses" element={<Courses />} />
           <Route path="/courses/:id" element={<CourseDetail />} />
-          <Route path="/lessons/:lessonId" element={<LessonPage />} />
+          <Route path="/lessons/:lessonSlug" element={<LessonPage />} />
           <Route path="/resources" element={<Resources />} />
           <Route path="/blog" element={<Blog />} />
           <Route path="/contact" element={<Contact />} />
@@ -63,17 +63,20 @@ export default function App() {
           <Route path="/projects" element={<Projects />} />
           <Route path="/lesson-engine" element={<LessonEnginePage />} />
           <Route path="/portfolio" element={<Portfolio />} />
-          <Route path="/instructor" element={<InstructorPage />} />
+          
           
 <Route
   path="/library/college/linear-algebra/module/:moduleNumber"
   element={<LinearAlgebraModule />}
 />
-         <Route
+  <Route
   path="/dashboard"
-  element={<Navigate to="/instructor/courses" replace />}
+  element={
+    <ProtectedRoute allowedRoles={["student"]}>
+      <Dashboard />
+    </ProtectedRoute>
+  }
 />
-
           <Route
             path="/admin"
             element={
@@ -90,12 +93,21 @@ export default function App() {
           path="/projects/:id"
            element={<ProjectDetail />
         } 
+        
         />
+        
         <Route 
         path="/mastery" 
         element={<MasteryPage />}
          />
-         
+    <Route
+  path="/instructor"
+  element={
+    <ProtectedRoute allowedRoles={["admin", "instructor"]}>
+      <InstructorPage />
+    </ProtectedRoute>
+  }
+/>    
 
 <Route
   path="/instructor/create-course"
@@ -165,17 +177,14 @@ element={<LibraryHome />}
   path="/library/high-school"
   element={<HighSchoolMathematics />}
 />
-
 <Route
   path="/library/high-school/algebra-1"
   element={<AlgebraOne />}
 />
-
 <Route
   path="/library/high-school/algebra-1/module/:moduleNumber"
   element={<AlgebraOneModule />}
 />
-
 <Route
   path="/library/high-school/algebra-1/module/:moduleNumber/lesson/:lessonSlug"
   element={<AlgebraOneLesson />}

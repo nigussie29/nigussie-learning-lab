@@ -1,24 +1,39 @@
-import { Navigate } from 'react-router-dom';
-import useAuth from '../hooks/useAuth';
+import { Navigate } from "react-router-dom";
+import { useAuth } from "../context/AuthContext.jsx";
 
-export default function ProtectedRoute({ children, requireAdmin = false }) {
-  const { session, profile, loading } = useAuth();
+export default function ProtectedRoute({
+  children,
+  allowedRoles = [],
+}) {
+  const { user, profile, loading } = useAuth();
 
-  if (loading) {
-    return <div className="section py-20">Loading...</div>;
+  if (loading || (user && !profile)) {
+    return (
+      <div className="flex min-h-screen items-center justify-center">
+        <h2 className="text-xl font-bold">
+          Loading account...
+        </h2>
+      </div>
+    );
   }
 
-  if (!session) {
+  if (!user) {
     return <Navigate to="/login" replace />;
   }
 
-  if (requireAdmin && profile?.role !== 'admin') {
-    return (
-      <div className="section py-20">
-        <h1 className="text-3xl font-bold">Admin Access Needed</h1>
-        <p className="mt-3 text-slate-600">Your account is not an admin account yet.</p>
-      </div>
-    );
+  if (
+    allowedRoles.length > 0 &&
+    !allowedRoles.includes(profile?.role)
+  ) {
+    if (profile?.role === "admin") {
+      return <Navigate to="/admin" replace />;
+    }
+
+    if (profile?.role === "instructor") {
+      return <Navigate to="/instructor" replace />;
+    }
+
+    return <Navigate to="/dashboard" replace />;
   }
 
   return children;

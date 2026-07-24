@@ -1,63 +1,58 @@
 export default function BuildSection({ build }) {
-  if (!build) return null;
+  if (!build || typeof build !== "object") {
+    return null;
+  }
+
+
 
   return (
-    <section className="mt-8 rounded-3xl bg-white p-8 shadow-sm">
-      <div className="flex items-center gap-3">
-        <span className="text-4xl">💻</span>
-
-        <div>
-          <h2 className="text-3xl font-extrabold text-slate-900">
-            Creator Challenge
-          </h2>
-
-          <p className="text-slate-500">
-            Build something meaningful
-          </p>
-        </div>
-      </div>
-
-      <h3 className="mt-8 text-2xl font-bold">
-        {build.title}
-      </h3>
+    <section className="rounded-3xl bg-white p-8 shadow-sm">
+      <h2 className="text-2xl font-extrabold text-slate-900">
+        {build.title || "Build"}
+      </h2>
 
       {build.description && (
-        <p className="mt-4 text-lg leading-8 text-slate-700">
+        <p className="mt-5 leading-8 text-slate-700">
           {build.description}
         </p>
       )}
 
-      {build.requirements?.length > 0 && (
-        <>
-          <h4 className="mt-8 text-xl font-bold">
-            Requirements
-          </h4>
+      {(build.task || build.challenge) && (
+        <div className="mt-6 rounded-2xl border border-blue-200 bg-blue-50 p-6">
+          <h3 className="text-lg font-bold text-slate-900">
+            Build Challenge
+          </h3>
 
-          <ul className="mt-4 list-disc space-y-2 pl-6">
-            {build.requirements.map((req, index) => (
-              <li key={index}>{req}</li>
-            ))}
-          </ul>
-        </>
+          <p className="mt-3 leading-7 text-slate-700">
+            {build.task || build.challenge}
+          </p>
+        </div>
       )}
 
-      {build.tools?.length > 0 && (
-        <>
-          <h4 className="mt-8 text-xl font-bold">
-            Recommended Tools
-          </h4>
+      {build.starterCode && (
+        <div className="mt-6">
+          <h3 className="text-lg font-bold text-slate-900">
+            Starter Code
+          </h3>
 
-          <div className="mt-4 flex flex-wrap gap-3">
-            {build.tools.map((tool) => (
-              <span
-                key={tool}
-                className="rounded-full bg-blue-100 px-4 py-2 font-semibold text-blue-700"
-              >
-                {tool}
-              </span>
+          <pre className="mt-3 overflow-x-auto rounded-2xl bg-slate-900 p-5 text-sm text-green-400">
+            <code>{build.starterCode}</code>
+          </pre>
+        </div>
+      )}
+
+      {build.requirements?.length > 0 && (
+        <div className="mt-6">
+          <h3 className="text-lg font-bold text-slate-900">
+            Requirements
+          </h3>
+
+          <ul className="mt-3 list-disc space-y-2 pl-6 text-slate-700">
+            {build.requirements.map((requirement, index) => (
+              <li key={index}>{requirement}</li>
             ))}
-          </div>
-        </>
+          </ul>
+        </div>
       )}
     </section>
   );

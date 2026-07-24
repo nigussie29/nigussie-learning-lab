@@ -1,9 +1,10 @@
 import { Link, useParams } from "react-router-dom";
-
+import {
+  completeLesson,
+  getCompletedLessons,
+} from "../../../academy/mastery/ProgressTracker";
 import { getAlgebraOneLessonBySlug } from "../../../data/mathematics/highschool/algebraOne/lessons/index.js";
-import VocabularySection from "../../../components/lesson/VocabularySection.jsx";
-import ConceptExplanation from "../../../components/lesson/ConceptExplanation.jsx";
-import WorkedExamples from "../../../components/lesson/WorkedExamples.jsx";
+import { useState } from "react";
 
 export default function AlgebraOneLesson() {
   const { lessonSlug } = useParams();
@@ -363,6 +364,48 @@ export default function AlgebraOneLesson() {
           </ul>
         </div>
       </section>
+      {/* Lesson completion */}
+
+<section
+  className={`mt-10 rounded-2xl border p-6 ${
+    isCompleted
+      ? "border-emerald-300 bg-emerald-50"
+      : "border-blue-200 bg-blue-50"
+  }`}
+>
+  <div className="flex flex-col gap-5 sm:flex-row sm:items-center sm:justify-between">
+    <div>
+      <p className="text-sm font-bold uppercase tracking-wider text-blue-700">
+        Lesson Progress
+      </p>
+
+      <h2 className="mt-2 text-2xl font-bold text-gray-900">
+        {isCompleted
+          ? "Lesson completed!"
+          : "Ready to complete this lesson?"}
+      </h2>
+
+      <p className="mt-2 text-gray-700">
+        {isCompleted
+          ? "Your progress and XP have been recorded."
+          : "Complete the lesson after reviewing the material and activities."}
+      </p>
+    </div>
+
+    <button
+      type="button"
+      onClick={handleCompleteLesson}
+      disabled={isCompleted}
+      className={`rounded-xl px-6 py-3 font-bold text-white transition ${
+        isCompleted
+          ? "cursor-not-allowed bg-emerald-600"
+          : "bg-blue-600 hover:bg-blue-700"
+      }`}
+    >
+      {isCompleted ? "✓ Completed" : "Complete Lesson"}
+    </button>
+  </div>
+</section>
 
       {/* Navigation */}
 

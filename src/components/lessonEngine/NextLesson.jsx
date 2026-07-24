@@ -1,19 +1,38 @@
-export default function NextLesson({ lesson }) {
-  return (
-    <section className="mt-8 rounded-3xl bg-gradient-to-r from-indigo-700 to-blue-700 p-8 text-white">
-      <h2 className="text-3xl font-extrabold">
-        🚀 Next Mission
-      </h2>
+import { Link } from "react-router-dom";
 
-      <p className="mt-4 text-lg text-blue-100">
-        Continue your learning journey with:
+export default function NextLesson({ lesson }) {
+  const nextLesson = lesson?.nextLesson;
+
+  if (!nextLesson?.slug) {
+    return null;
+  }
+
+  return (
+    <section className="rounded-3xl bg-blue-600 p-8 text-white">
+      <p className="font-semibold text-blue-100">
+        Continue Learning
       </p>
 
-      <div className="mt-6 rounded-2xl bg-white/10 p-6">
-        <h3 className="text-2xl font-bold">
-          {lesson}
-        </h3>
-      </div>
+      <h2 className="mt-2 text-2xl font-bold">
+        Next Lesson
+      </h2>
+
+      <h3 className="mt-4 text-xl font-semibold">
+        {nextLesson.title || "Continue to the next lesson"}
+      </h3>
+
+      {nextLesson.description && (
+        <p className="mt-3 leading-7 text-blue-100">
+          {nextLesson.description}
+        </p>
+      )}
+
+      <Link
+        to={`/lessons/${nextLesson.slug}`}
+        className="mt-6 inline-block rounded-xl bg-white px-6 py-3 font-bold text-blue-600 hover:bg-blue-50"
+      >
+        Continue →
+      </Link>
     </section>
   );
 }

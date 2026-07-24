@@ -1,8 +1,8 @@
 import { Link, NavLink, useNavigate } from 'react-router-dom';
 import { Menu, X, GraduationCap } from 'lucide-react';
 import { useState } from 'react';
-import { supabase } from '../lib/supabaseClient';
-import useAuth from '../hooks/useAuth';
+import { useAuth } from "../context/AuthContext.jsx";
+import { supabase } from "../lib/supabase";
 
 const links = [
   { to: '/', label: 'Home' },
@@ -13,16 +13,24 @@ const links = [
   { to: '/blog', label: 'Blog' },
   { to: '/contact', label: 'Contact' }
 ];
+function getDashboardLink(role) {
+  switch (role) {
+    case "admin":
+      return "/admin";
 
+    case "instructor":
+      return "/instructor";
+
+    default:
+      return "/dashboard";
+  }
+}
 export default function Navbar() {
   const [open, setOpen] = useState(false);
-  const { session, profile } = useAuth();
+  const { user, profile, signOut } = useAuth();
   const navigate = useNavigate();
 
-  async function signOut() {
-    await supabase.auth.signOut();
-    navigate('/');
-  }
+ 
 
   const navClass = ({ isActive }) =>
     isActive ? 'text-brand-700 font-semibold' : 'text-slate-700 hover:text-brand-700';
@@ -46,9 +54,30 @@ export default function Navbar() {
           {profile?.role === 'admin' && (
             <NavLink to="/admin" className={navClass}>Admin</NavLink>
           )}
-          {session ? (
+          {user ? (
             <>
-              <NavLink to="/dashboard" className={navClass}>Dashboard</NavLink>
+              <NavLink
+  to={getDashboardLink(profile?.role)}
+  className={navClass}
+>
+  Dashboard
+</NavLink>
+
+<div className="flex items-center gap-3 rounded-full border border-slate-200 bg-slate-50 px-3 py-2">
+  <div className="flex h-9 w-9 items-center justify-center rounded-full bg-brand-600 text-sm font-bold text-white">
+    {profile?.full_name?.charAt(0)?.toUpperCase() || "U"}
+  </div>
+
+  <div className="hidden lg:block">
+    <p className="text-sm font-semibold text-slate-900">
+      {profile?.full_name}
+    </p>
+
+    <p className="text-xs capitalize text-slate-500">
+      {profile?.role}
+    </p>
+  </div>
+</div>
               <button onClick={signOut} className="btn-secondary py-2">Logout</button>
             </>
           ) : (

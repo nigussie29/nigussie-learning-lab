@@ -91,7 +91,7 @@ export default function CourseDetail() {
               Start learning today and build real career-ready skills.
             </p>
 <Link
-  to="/lessons/1"
+  to="/lessons/introduction-to-python"
   className="mt-6 block w-full rounded-xl bg-blue-600 py-3 text-center font-bold text-white hover:bg-blue-700"
 >
   Start First Lesson

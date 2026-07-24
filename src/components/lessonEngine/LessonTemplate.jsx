@@ -57,10 +57,11 @@ export default function LessonTemplate({ lesson }) {
           <BuildSection build={lesson.build} />
         )}
 
-        {lesson.master && (
-          <MasterSection master={lesson.master} />
-        )}
-
+       {lesson.master && (
+    <MasterSection
+        lesson={lesson}
+    />
+)}
         {lesson.luminery && (
           <LumineryCoach
             message={lesson.luminery.message}

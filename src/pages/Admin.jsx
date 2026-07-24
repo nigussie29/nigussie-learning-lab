@@ -1,6 +1,5 @@
 import { useEffect, useState } from 'react';
-import { supabase } from '../lib/supabaseClient';
-import useAuth from '../hooks/useAuth';
+import { useAuth } from "../context/AuthContext.jsx";
 
 const emptyCourse = {
   title: '',
@@ -34,7 +33,7 @@ const emptyResource = {
 };
 
 export default function Admin() {
-  const { session } = useAuth();
+ const { user, profile, loading } = useAuth();
 
   const [activeTab, setActiveTab] = useState('course');
 

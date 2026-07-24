@@ -1,84 +1,52 @@
-export default function AppliedMathematicsConnection({ math }) {
+export default function AppliedMathematicsConnection({ lesson }) {
+  const appliedMathematics = lesson?.appliedMathematics;
+
+  if (!appliedMathematics) {
+    return null;
+  }
+
+  const mainContent =
+    appliedMathematics.content ||
+    appliedMathematics.explanation ||
+    appliedMathematics.concept ||
+    appliedMathematics.foundation;
+
+  const applications = appliedMathematics.applications || [];
+
   return (
-    <section className="mt-8 rounded-3xl bg-white p-8 shadow-sm">
-      <div className="flex items-center gap-3">
-        <span className="text-4xl">📐</span>
+    <section className="rounded-3xl bg-white p-8 shadow-sm">
+      <h2 className="text-2xl font-extrabold text-slate-900">
+        {appliedMathematics.title ||
+          "Applied Mathematics Connection"}
+      </h2>
 
-        <div>
-          <h2 className="text-3xl font-extrabold text-slate-900">
-            Applied Mathematics Connection
-          </h2>
-
-          <p className="text-slate-500">
-            Discover the mathematical ideas behind this lesson
-          </p>
-        </div>
-      </div>
-
-      {/* Mathematical Foundation */}
-      <div className="mt-8">
-        <h3 className="text-xl font-bold text-slate-900">
-          Mathematical Foundation
+      {appliedMathematics.concept && (
+        <h3 className="mt-5 text-lg font-bold text-slate-900">
+          {appliedMathematics.concept}
         </h3>
+      )}
 
-        <div className="mt-4 flex flex-wrap gap-3">
-          {math.foundation.map((item) => (
-            <span
-              key={item}
-              className="rounded-full bg-blue-100 px-4 py-2 font-semibold text-blue-700"
-            >
-              {item}
-            </span>
-          ))}
-        </div>
-      </div>
-
-      {/* Related Topics */}
-      <div className="mt-8">
-        <h3 className="text-xl font-bold text-slate-900">
-          Related Mathematical Topics
-        </h3>
-
-        <div className="mt-4 flex flex-wrap gap-3">
-          {math.relatedTopics.map((topic) => (
-            <span
-              key={topic}
-              className="rounded-full bg-green-100 px-4 py-2 font-semibold text-green-700"
-            >
-              {topic}
-            </span>
-          ))}
-        </div>
-      </div>
-
-      {/* Why it matters */}
-      <div className="mt-8 rounded-2xl bg-slate-50 p-6">
-        <h3 className="text-xl font-bold text-slate-900">
-          Mathematical Thinking
-        </h3>
-
-        <p className="mt-3 text-lg leading-8 text-slate-700">
-          {math.thinking}
+      {mainContent && (
+        <p className="mt-4 whitespace-pre-line leading-8 text-slate-700">
+          {mainContent}
         </p>
-      </div>
+      )}
 
-      {/* Future */}
-      <div className="mt-8">
-        <h3 className="text-xl font-bold text-slate-900">
-          This Mathematics Leads To
-        </h3>
+      {applications.length > 0 && (
+        <div className="mt-6">
+          <h3 className="font-bold text-slate-900">
+            Applications
+          </h3>
 
-        <div className="mt-4 grid gap-3 md:grid-cols-2">
-          {math.future.map((item) => (
-            <div
-              key={item}
-              className="rounded-2xl bg-violet-50 p-4"
-            >
-              {item}
-            </div>
-          ))}
+          <ul className="mt-3 list-disc space-y-2 pl-6 text-slate-700">
+            {applications.map((application, index) => (
+              <li key={`${application}-${index}`}>
+                {application}
+              </li>
+            ))}
+          </ul>
         </div>
-      </div>
+      )}
     </section>
   );
 }
