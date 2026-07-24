@@ -3,7 +3,9 @@ import Portfolio from './pages/Portfolio.jsx';
 
 import Navbar from "./components/Navbar.jsx";
 import Footer from "./components/Footer.jsx";
-import Mathematics from "./pages/schools/Mathematics";
+
+import Mathematics from "./pages/library/Mathematics";
+import MathematicsSchool from "./pages/schools/Mathematics";
 
 import LinearAlgebraModule from "./pages/library/college/LinearAlgebraModule";
 import Home from "./pages/Home.jsx";
@@ -35,7 +37,6 @@ import PublishCoursePage from "./pages/PublishCoursePage.jsx";
 import TestSupabase from "./pages/TestSupabase";
 import { Navigate } from "react-router-dom";
 import LibraryHome from "./pages/library/LibraryHome.jsx";
-import Mathematics from "./pages/library/Mathematics.jsx";
 import LinearAlgebraLesson from "./pages/library/college/LinearAlgebraLesson";
 import LinearAlgebra from "./pages/library/college/LinearAlgebra";
 import LinearAlgebraLessonsTest from "./pages/library/college/LinearAlgebraLessonsTest";
@@ -64,7 +65,10 @@ export default function App() {
           <Route path="/projects" element={<Projects />} />
           <Route path="/lesson-engine" element={<LessonEnginePage />} />
           <Route path="/portfolio" element={<Portfolio />} />
-          <Route path="/schools/mathematics" element={<Mathematics />}/>
+          <Route
+  path="/schools/mathematics"
+  element={<MathematicsSchool />}
+/>
           
 <Route
   path="/library/college/linear-algebra/module/:moduleNumber"
