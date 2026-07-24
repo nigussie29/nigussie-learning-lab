@@ -3,6 +3,7 @@ import Portfolio from './pages/Portfolio.jsx';
 
 import Navbar from "./components/Navbar.jsx";
 import Footer from "./components/Footer.jsx";
+import Mathematics from "./pages/schools/Mathematics";
 
 import LinearAlgebraModule from "./pages/library/college/LinearAlgebraModule";
 import Home from "./pages/Home.jsx";
@@ -63,7 +64,7 @@ export default function App() {
           <Route path="/projects" element={<Projects />} />
           <Route path="/lesson-engine" element={<LessonEnginePage />} />
           <Route path="/portfolio" element={<Portfolio />} />
-          
+          <Route path="/schools/mathematics" element={<Mathematics />}/>
           
 <Route
   path="/library/college/linear-algebra/module/:moduleNumber"
