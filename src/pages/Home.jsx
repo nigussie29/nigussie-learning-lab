@@ -6,7 +6,7 @@ import {
   LineChart,
   Users,
 } from "lucide-react";
-
+import SchoolsSection from "../features/home/SchoolsSection";
 import HomeHero from "../features/home/HomeHero.jsx";
 import LearningOS from "../features/home/LearningOS.jsx";
 
@@ -48,6 +48,7 @@ export default function Home() {
     <main>
       <HomeHero />
        <LearningOS />
+       <SchoolsSection />
 
       <section className="section py-16">
         <div className="max-w-3xl">
