@@ -19,21 +19,30 @@ export default function PathwayTimeline({ steps = [] }) {
 
         <div className="space-y-6">
           {steps.map((step, index) => (
-            <div key={step} className="flex items-start gap-6">
+            <div
+              key={step.title || index}
+              className="flex items-start gap-6"
+            >
               <div className="flex flex-col items-center">
                 <div className="flex h-12 w-12 items-center justify-center rounded-full bg-blue-600 font-bold text-white">
                   {index + 1}
                 </div>
 
                 {index < steps.length - 1 && (
-                  <div className="mt-2 h-12 w-1 rounded bg-blue-200"></div>
+                  <div className="mt-2 h-12 w-1 rounded bg-blue-200" />
                 )}
               </div>
 
-              <div className="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm flex-1">
+              <div className="flex-1 rounded-2xl border border-slate-200 bg-white p-5 shadow-sm">
                 <h3 className="text-xl font-bold text-slate-900">
-                  {step}
+                  {step.title}
                 </h3>
+
+                {step.description && (
+                  <p className="mt-2 leading-7 text-slate-600">
+                    {step.description}
+                  </p>
+                )}
               </div>
             </div>
           ))}
