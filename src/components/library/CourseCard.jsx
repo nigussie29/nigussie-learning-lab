@@ -17,8 +17,17 @@ export default function CourseCard({
     path,
   } = course;
 
-  const isAvailable = status === "Available" || status === "Published";
+  const normalizedStatus = (status || "planned").toLowerCase();
 
+  const isAvailable =
+    normalizedStatus === "available" ||
+    normalizedStatus === "published";
+
+  const statusLabel = isAvailable
+    ? "Available"
+    : normalizedStatus === "coming-soon"
+      ? "Coming Soon"
+      : status;
   return (
     <article className="flex h-full flex-col rounded-3xl bg-white p-7 shadow-sm transition hover:-translate-y-1 hover:shadow-md">
       <div className="flex items-start justify-between gap-4">
@@ -39,7 +48,7 @@ export default function CourseCard({
               : "bg-amber-100 text-amber-700"
           }`}
         >
-          {status}
+          {statusLabel}
         </span>
       </div>
 
@@ -81,7 +90,9 @@ export default function CourseCard({
             disabled
             className="rounded-xl bg-slate-100 px-5 py-3 font-bold text-slate-500"
           >
-            Course Development Planned
+            {normalizedStatus === "coming-soon"
+  ? "Coming Soon"
+  : "Course Development Planned"}
           </button>
         )}
       </div>

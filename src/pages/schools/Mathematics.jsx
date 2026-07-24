@@ -8,6 +8,7 @@ export default function Mathematics() {
   return (
     <>
       <SchoolHero {...mathematicsSchool.hero} />
+      
 
       <PathwayTimeline
         steps={mathematicsSchool.pathway}
@@ -22,7 +23,7 @@ export default function Mathematics() {
           <div className="grid gap-8 md:grid-cols-2 xl:grid-cols-3">
             {mathematicsSchool.programs.map((program) => (
               <ProgramCard
-                key={program.title}
+                key={program.id}
                 {...program}
               />
             ))}
